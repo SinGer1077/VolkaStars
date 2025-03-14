@@ -6,6 +6,8 @@ import kha.Framebuffer;
 import kha.Scheduler;
 import kha.System;
 
+import Star;
+
 class Main {
 	static var logo = ["1 1 1 1 111", "11  111 111", "1 1 1 1 1 1"];
 
@@ -34,8 +36,8 @@ class Main {
 		      case _:
 		    }
 		  }
-		}
-
+		}		
+		
 		// Pop the pushed translation so it will not accumulate over multiple frames
 		g2.popTransformation();
 		// Finish the drawing operations
@@ -48,8 +50,13 @@ class Main {
 			Assets.loadEverything(function () {
 				// Avoid passing update/render directly,
 				// so replacing them via code injection works
+				var star = new Star();
+				//var empty = new Empty();
 				Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
-				System.notifyOnFrames(function (frames) { render(frames); });
+				//System.notifyOnFrames(function (frames) { empty.render;});
+				trace("Starting...");
+				System.notifyOnFrames(star.render);
+				//System.notifyOnFrames(function (frames) { star.render;});
 			});
 		});
 	}
