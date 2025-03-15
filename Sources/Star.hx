@@ -1,5 +1,8 @@
 package;
 
+import js.html.TimeElement;
+import haxe.Timer;
+import kha.math.Vector2;
 import kha.graphics5_.PipelineState;
 import kha.Assets;
 import kha.Color;
@@ -30,13 +33,13 @@ class Star{
     static var vertices:Array<Float>;
     static var indices:Array<Int>;
 
-    public function new() {
+    public function new(size:Float, position:Vector2) {
         structure = new VertexStructure();
         structure.add("pos", VertexData.Float32_2X);           
-        fillBuffers(32, structure);
+        fillBuffers(32, size, position, structure);
     }
 
-    function fillBuffers(segments:Int, structure: VertexStructure) {
+    function fillBuffers(segments:Int, size:Float, position:Vector2, structure: VertexStructure) {
         var angleStep = (2 * Math.PI) / segments;
         
         var vertexCount = segments + 1; 
@@ -48,14 +51,14 @@ class Star{
         iBuffer = new IndexBuffer(indicesCount, Usage.StaticUsage);
         var indexData = iBuffer.lock();
 
-        vertexData[0] = 0; 
-        vertexData[1] = 0; 
+        vertexData[0] = position.x; 
+        vertexData[1] = position.y; 
 
         for (i in 0...segments) {
             var angle = i * angleStep;
             
-            var x = Math.cos(angle);
-            var y = Math.sin(angle);
+            var x = Math.cos(angle) * size + position.x;
+            var y = Math.sin(angle) * size + position.y;
 
             var index = (i + 1) * 2;
             vertexData[index] = x;
@@ -72,14 +75,11 @@ class Star{
         pipeline = new PipelineState();
 		pipeline.inputLayout = [structure];
         pipeline.vertexShader = Shaders.simple_vert;
-		pipeline.fragmentShader = Shaders.simple_frag;	
+		pipeline.fragmentShader = Shaders.full_galaxy_frag;	
 		pipeline.colorAttachmentCount = 1;
 		pipeline.colorAttachments[0] = kha.graphics4.TextureFormat.RGBA32;
 		pipeline.depthStencilAttachment = kha.graphics4.DepthStencilFormat.Depth16;
 		pipeline.compile();
-
-        trace("Vertex Count:", vBuffer.count());
-        trace("Index Count:", iBuffer.count());
     }
 
     public function render(frames: Array<Framebuffer>): Void {

@@ -1,6 +1,36 @@
 {
 	"files": [
 		{
+			"name": "full_galaxy_frag",
+			"files": [
+				"full_galaxy.frag.essl",
+				"full_galaxy-webgl2.frag.essl"
+			],
+			"file_sizes": [
+				1
+			],
+			"type": "shader",
+			"inputs": [
+				{
+					"name": "fragCoord",
+					"type": "vec2"
+				}
+			],
+			"outputs": [
+				{
+					"name": "fragColor",
+					"type": "vec4"
+				}
+			],
+			"uniforms": [
+				{
+					"name": "u_resolution",
+					"type": "vec2"
+				}
+			],
+			"types": []
+		},
+		{
 			"name": "painter_colored_frag",
 			"files": [
 				"painter-colored.frag.essl",
@@ -451,7 +481,12 @@
 					"type": "int"
 				}
 			],
-			"outputs": [],
+			"outputs": [
+				{
+					"name": "fragCoord",
+					"type": "vec2"
+				}
+			],
 			"uniforms": [],
 			"types": [
 				{

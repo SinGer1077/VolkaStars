@@ -1,5 +1,7 @@
 package;
 
+import kha.math.Random;
+import kha.math.Vector2;
 import kha.Assets;
 import kha.Color;
 import kha.Framebuffer;
@@ -50,12 +52,14 @@ class Main {
 			Assets.loadEverything(function () {
 				// Avoid passing update/render directly,
 				// so replacing them via code injection works
-				var star = new Star();
+				
 				//var empty = new Empty();
 				Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
 				//System.notifyOnFrames(function (frames) { empty.render;});
-				trace("Starting...");
-				System.notifyOnFrames(star.render);
+				for (i in 0...100){
+					var star = new Star(1.5, new Vector2(0., 0.,));
+					System.notifyOnFrames(star.render);
+				}
 				//System.notifyOnFrames(function (frames) { star.render;});
 			});
 		});
