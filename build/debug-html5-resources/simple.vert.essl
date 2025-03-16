@@ -2,10 +2,15 @@
 
 attribute vec2 pos;
 varying vec2 fragCoord;
+varying float uvScale;
+attribute vec3 uvData;
+varying vec2 uvPosition;
 
 void main()
 {
     gl_Position = vec4(pos, 1.0, 1.0);
     fragCoord = gl_Position.xy;
+    uvScale = uvData.z;
+    uvPosition = uvData.xy;
 }
 

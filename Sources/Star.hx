@@ -1,5 +1,6 @@
 package;
 
+import kha.math.Vector3;
 import js.html.TimeElement;
 import haxe.Timer;
 import kha.math.Vector2;
@@ -35,7 +36,8 @@ class Star{
 
     public function new(size:Float, position:Vector2) {
         structure = new VertexStructure();
-        structure.add("pos", VertexData.Float32_2X);           
+        structure.add("pos", VertexData.Float32_2X);    
+        structure.add("uvData", VertexData.Float32_3X);       
         fillBuffers(32, size, position, structure);
     }
 
@@ -54,15 +56,24 @@ class Star{
         vertexData[0] = position.x; 
         vertexData[1] = position.y; 
 
+        vertexData[2] = 0.;
+        vertexData[3] = 0.;
+        vertexData[4] = 0.3;
+
+
         for (i in 0...segments) {
             var angle = i * angleStep;
             
             var x = Math.cos(angle) * size + position.x;
             var y = Math.sin(angle) * size + position.y;
 
-            var index = (i + 1) * 2;
+            var index = (i + 1) * 5;
             vertexData[index] = x;
             vertexData[index + 1] = y;
+            
+            vertexData[index + 2] = 0.;
+            vertexData[index + 3] = 0.;
+            vertexData[index + 4] = 0.3;
 
             indexData[i * 3] = 0;
             indexData[i * 3 + 1] = i + 1;

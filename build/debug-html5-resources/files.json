@@ -14,6 +14,14 @@
 				{
 					"name": "fragCoord",
 					"type": "vec2"
+				},
+				{
+					"name": "uvScale",
+					"type": "float"
+				},
+				{
+					"name": "uvPosition",
+					"type": "vec2"
 				}
 			],
 			"outputs": [
@@ -23,6 +31,10 @@
 				}
 			],
 			"uniforms": [
+				{
+					"name": "u_time",
+					"type": "float"
+				},
 				{
 					"name": "u_resolution",
 					"type": "vec2"
@@ -473,6 +485,10 @@
 					"type": "vec2"
 				},
 				{
+					"name": "uvData",
+					"type": "vec3"
+				},
+				{
 					"name": "gl_VertexID",
 					"type": "int"
 				},
@@ -484,6 +500,14 @@
 			"outputs": [
 				{
 					"name": "fragCoord",
+					"type": "vec2"
+				},
+				{
+					"name": "uvScale",
+					"type": "float"
+				},
+				{
+					"name": "uvPosition",
 					"type": "vec2"
 				}
 			],
