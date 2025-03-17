@@ -1,6 +1,40 @@
 {
 	"files": [
 		{
+			"name": "DroidSans",
+			"files": [
+				"DroidSans.ttf"
+			],
+			"file_sizes": [
+				41028
+			],
+			"type": "font"
+		},
+		{
+			"name": "black_white_gradient",
+			"files": [
+				"black_white_gradient.png"
+			],
+			"file_sizes": [
+				7056
+			],
+			"type": "image",
+			"original_width": 360,
+			"original_height": 270
+		},
+		{
+			"name": "color_wheel",
+			"files": [
+				"color_wheel.png"
+			],
+			"file_sizes": [
+				41416
+			],
+			"type": "image",
+			"original_width": 360,
+			"original_height": 270
+		},
+		{
 			"name": "full_galaxy_frag",
 			"files": [
 				"full_galaxy.frag.essl",
@@ -41,6 +75,18 @@
 				}
 			],
 			"types": []
+		},
+		{
+			"name": "kode",
+			"files": [
+				"kode.png"
+			],
+			"file_sizes": [
+				7996
+			],
+			"type": "image",
+			"original_width": 280,
+			"original_height": 280
 		},
 		{
 			"name": "painter_colored_frag",

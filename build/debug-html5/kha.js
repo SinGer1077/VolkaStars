@@ -33,6 +33,29 @@ EReg.prototype = {
 	}
 	,__class__: EReg
 };
+var FPSCounter = function() {
+	kha_Assets.loadEverything($bind(this,this.loadingFinished));
+};
+$hxClasses["FPSCounter"] = FPSCounter;
+FPSCounter.__name__ = true;
+FPSCounter.prototype = {
+	ui: null
+	,loadingFinished: function() {
+		this.ui = new zui_Zui({ font : kha_Assets.fonts.DroidSans});
+		kha_System.notifyOnFrames($bind(this,this.render));
+	}
+	,render: function(framebuffers) {
+		var g = framebuffers[0].get_g2();
+		g.begin();
+		g.end();
+		this.ui.begin(g);
+		if(this.ui.window(zui_Handle.global.nest(1,null),10,10,240,600,true)) {
+			this.ui.text("Text",0);
+		}
+		this.ui.end();
+	}
+	,__class__: FPSCounter
+};
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
 HxOverrides.__name__ = true;
@@ -134,12 +157,7 @@ Main.main = function() {
 			kha_Scheduler.addTimeTask(function() {
 				Main.update();
 			},0,0.016666666666666666);
-			var _g = 0;
-			while(_g < 100) {
-				var i = _g++;
-				var star = new Star(1.5,new kha_math_Vector2(0.,0.));
-				kha_System.notifyOnFrames($bind(star,star.render));
-			}
+			var fps = new FPSCounter();
 		});
 	});
 };
@@ -1292,6 +1310,13 @@ haxe_ds_IntMap.__name__ = true;
 haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
 haxe_ds_IntMap.prototype = {
 	h: null
+	,remove: function(key) {
+		if(!this.h.hasOwnProperty(key)) {
+			return false;
+		}
+		delete(this.h[key]);
+		return true;
+	}
 	,keys: function() {
 		var a = [];
 		for( var key in this.h ) if(this.h.hasOwnProperty(key)) a.push(+key);
@@ -1932,13 +1957,64 @@ kha__$Assets_AssetData._get = function(this1,key) {
 	return Reflect.getProperty(this1,key);
 };
 var kha__$Assets_ImageList = function() {
-	this.names = [];
+	this.names = ["black_white_gradient","color_wheel","kode"];
+	this.kodeSize = 7996;
+	this.kodeDescription = { name : "kode", original_height : 280, file_sizes : [7996], original_width : 280, files : ["kode.png"], type : "image"};
+	this.kodeName = "kode";
+	this.kode = null;
+	this.color_wheelSize = 41416;
+	this.color_wheelDescription = { name : "color_wheel", original_height : 270, file_sizes : [41416], original_width : 360, files : ["color_wheel.png"], type : "image"};
+	this.color_wheelName = "color_wheel";
+	this.color_wheel = null;
+	this.black_white_gradientSize = 7056;
+	this.black_white_gradientDescription = { name : "black_white_gradient", original_height : 270, file_sizes : [7056], original_width : 360, files : ["black_white_gradient.png"], type : "image"};
+	this.black_white_gradientName = "black_white_gradient";
+	this.black_white_gradient = null;
 };
 $hxClasses["kha._Assets.ImageList"] = kha__$Assets_ImageList;
 kha__$Assets_ImageList.__name__ = true;
 kha__$Assets_ImageList.prototype = {
 	get: function(name) {
 		return Reflect.field(this,name);
+	}
+	,black_white_gradient: null
+	,black_white_gradientName: null
+	,black_white_gradientDescription: null
+	,black_white_gradientSize: null
+	,black_white_gradientLoad: function(done,failure) {
+		kha_Assets.loadImage("black_white_gradient",function(image) {
+			done();
+		},failure,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 142, className : "kha._Assets.ImageList", methodName : "black_white_gradientLoad"});
+	}
+	,black_white_gradientUnload: function() {
+		this.black_white_gradient.unload();
+		this.black_white_gradient = null;
+	}
+	,color_wheel: null
+	,color_wheelName: null
+	,color_wheelDescription: null
+	,color_wheelSize: null
+	,color_wheelLoad: function(done,failure) {
+		kha_Assets.loadImage("color_wheel",function(image) {
+			done();
+		},failure,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 142, className : "kha._Assets.ImageList", methodName : "color_wheelLoad"});
+	}
+	,color_wheelUnload: function() {
+		this.color_wheel.unload();
+		this.color_wheel = null;
+	}
+	,kode: null
+	,kodeName: null
+	,kodeDescription: null
+	,kodeSize: null
+	,kodeLoad: function(done,failure) {
+		kha_Assets.loadImage("kode",function(image) {
+			done();
+		},failure,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 142, className : "kha._Assets.ImageList", methodName : "kodeLoad"});
+	}
+	,kodeUnload: function() {
+		this.kode.unload();
+		this.kode = null;
 	}
 	,names: null
 	,__class__: kha__$Assets_ImageList
@@ -1968,13 +2044,30 @@ kha__$Assets_BlobList.prototype = {
 	,__class__: kha__$Assets_BlobList
 };
 var kha__$Assets_FontList = function() {
-	this.names = [];
+	this.names = ["DroidSans"];
+	this.DroidSansSize = 41028;
+	this.DroidSansDescription = { name : "DroidSans", file_sizes : [41028], files : ["DroidSans.ttf"], type : "font"};
+	this.DroidSansName = "DroidSans";
+	this.DroidSans = null;
 };
 $hxClasses["kha._Assets.FontList"] = kha__$Assets_FontList;
 kha__$Assets_FontList.__name__ = true;
 kha__$Assets_FontList.prototype = {
 	get: function(name) {
 		return Reflect.field(this,name);
+	}
+	,DroidSans: null
+	,DroidSansName: null
+	,DroidSansDescription: null
+	,DroidSansSize: null
+	,DroidSansLoad: function(done,failure) {
+		kha_Assets.loadFont("DroidSans",function(font) {
+			done();
+		},failure,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 154, className : "kha._Assets.FontList", methodName : "DroidSansLoad"});
+	}
+	,DroidSansUnload: function() {
+		this.DroidSans.unload();
+		this.DroidSans = null;
 	}
 	,names: null
 	,__class__: kha__$Assets_FontList
@@ -31680,6 +31773,2484 @@ kha_vr_TimeWarpParms.prototype = {
 	,RightOverlay: null
 	,__class__: kha_vr_TimeWarpParms
 };
+var zui_Id = function() { };
+$hxClasses["zui.Id"] = zui_Id;
+zui_Id.__name__ = true;
+var zui_Themes = function() { };
+$hxClasses["zui.Themes"] = zui_Themes;
+zui_Themes.__name__ = true;
+var zui_Zui = function(ops) {
+	this.checkSelectImage = null;
+	this.elementsBaked = false;
+	this.scissor = false;
+	this.sticky = false;
+	this.tabVertical = false;
+	this.tabScroll = 0.0;
+	this.tabHandle = null;
+	this.tabColors = null;
+	this.tabNames = null;
+	this.tooltipTime = 0.0;
+	this.tooltipWait = false;
+	this.tooltipShown = false;
+	this.tooltipY = 0.0;
+	this.tooltipX = 0.0;
+	this.tooltipInvertY = false;
+	this.tooltipImgMaxWidth = null;
+	this.tooltipImg = null;
+	this.tooltipText = "";
+	this.comboInitialValue = 0;
+	this.comboToSubmit = 0;
+	this.submitComboHandle = null;
+	this.comboSearchBar = false;
+	this.comboSelectedWindow = null;
+	this.comboSelectedHandle = null;
+	this.tabPressedHandle = null;
+	this.tabPressed = false;
+	this.textToSubmit = "";
+	this.submitTextHandle = null;
+	this.textSelectedHandle = null;
+	this.restoreY = -1.0;
+	this.restoreX = -1.0;
+	this.windowHeaderH = 0.0;
+	this.windowHeaderW = 0.0;
+	this.dragHandle = null;
+	this.scrollHandle = null;
+	this.windowEnded = true;
+	this._windowY = 0.0;
+	this._windowX = 0.0;
+	this.imageScrollAlign = true;
+	this.scrollAlign = 0.0;
+	this.curRatio = -1;
+	this.highlightAnchor = 0;
+	this.cursorX = 0;
+	this.inputStartedTime = 0.0;
+	this.key = null;
+	this.isTabDown = false;
+	this.isReturnDown = false;
+	this.isEscapeDown = false;
+	this.isDeleteDown = false;
+	this.isBackspaceDown = false;
+	this.isADown = false;
+	this.isAltDown = false;
+	this.isCtrlDown = false;
+	this.isShiftDown = false;
+	this.isKeyDown = false;
+	this.isKeyPressed = false;
+	this.inputWheelDelta = 0;
+	this.inputEnabled = true;
+	this.inputRegistered = false;
+	this.sliderTooltipW = 0.0;
+	this.sliderTooltipY = 0.0;
+	this.sliderTooltipX = 0.0;
+	this.sliderTooltip = false;
+	this.touchHoldActivated = false;
+	this.highlightFullRow = false;
+	this.windowBorderRight = 0;
+	this.windowBorderLeft = 0;
+	this.windowBorderBottom = 0;
+	this.windowBorderTop = 0;
+	this.textColoring = null;
+	this.tabSwitchEnabled = true;
+	this.highlightOnSelect = true;
+	this.alwaysRedraw = false;
+	this.scrollEnabled = true;
+	this.imageInvertY = false;
+	this.changed = false;
+	this.isReleased = false;
+	this.isHovered = false;
+	this.isPushed = false;
+	this.isStarted = false;
+	this.enabled = true;
+	this.isTyping = false;
+	this.isScrolling = false;
+	if(ops.theme == null) {
+		ops.theme = zui_Themes.dark;
+	}
+	this.t = ops.theme;
+	if(ops.khaWindowId == null) {
+		ops.khaWindowId = 0;
+	}
+	if(ops.scaleFactor == null) {
+		ops.scaleFactor = 1.0;
+	}
+	if(ops.autoNotifyInput == null) {
+		ops.autoNotifyInput = true;
+	}
+	this.ops = ops;
+	this.setScale(ops.scaleFactor);
+	if(ops.autoNotifyInput) {
+		this.registerInput();
+	}
+	if(zui_Zui.copyReceiver == null) {
+		zui_Zui.copyReceiver = this;
+		kha_System.notifyOnCutCopyPaste($bind(this,this.onCut),$bind(this,this.onCopy),$bind(this,this.onPaste));
+		kha_System.notifyOnFrames(function(frames) {
+			if((zui_Zui.isCopy || zui_Zui.isPaste) && ++zui_Zui.copyFrame > 1) {
+				zui_Zui.isCopy = zui_Zui.isCut = zui_Zui.isPaste = false;
+			} else if(zui_Zui.copyFrame > 1 && ++zui_Zui.copyFrame > 2) {
+				zui_Zui.copyFrame = 0;
+				zui_Zui.textToPaste = "";
+			}
+		});
+	}
+	var rtTextVS = kha_graphics4_Graphics2.createTextVertexStructure();
+	this.rtTextPipeline = kha_graphics4_Graphics2.createTextPipeline(rtTextVS);
+	this.rtTextPipeline.alphaBlendSource = 1;
+	this.rtTextPipeline.compile();
+};
+$hxClasses["zui.Zui"] = zui_Zui;
+zui_Zui.__name__ = true;
+zui_Zui.extractColoring = function(text,col) {
+	var res = { colored : "", uncolored : ""};
+	var coloring = false;
+	var startFrom = 0;
+	var startLength = 0;
+	var _g = 0;
+	var _g1 = text.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var skipFirst = false;
+		var length = zui_Zui.checkStart(i,text,col.start);
+		var separatedLeft;
+		if(i != 0) {
+			var code = HxOverrides.cca(text,i - 1);
+			separatedLeft = !(code >= 65 && code <= 90 || code >= 97 && code <= 122);
+		} else {
+			separatedLeft = true;
+		}
+		var separatedRight;
+		if(i + length < text.length) {
+			var code1 = HxOverrides.cca(text,i + length);
+			separatedRight = !(code1 >= 65 && code1 <= 90 || code1 >= 97 && code1 <= 122);
+		} else {
+			separatedRight = true;
+		}
+		var isSeparated = separatedLeft && separatedRight;
+		if(length > 0 && (!coloring || col.end == "") && (!col.separated || isSeparated)) {
+			coloring = true;
+			startFrom = i;
+			startLength = length;
+			if(col.end != "" && col.end != "\n") {
+				skipFirst = true;
+			}
+		} else if(col.end == "") {
+			if(i == startFrom + startLength) {
+				coloring = false;
+			}
+		} else if(HxOverrides.substr(text,i,col.end.length) == col.end) {
+			coloring = false;
+		}
+		var b = coloring && !skipFirst;
+		res.colored += b ? text.charAt(i) : " ";
+		res.uncolored += b ? " " : text.charAt(i);
+	}
+	return res;
+};
+zui_Zui.isChar = function(code) {
+	if(!(code >= 65 && code <= 90)) {
+		if(code >= 97) {
+			return code <= 122;
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+};
+zui_Zui.checkStart = function(i,text,start) {
+	var _g = 0;
+	while(_g < start.length) {
+		var s = start[_g];
+		++_g;
+		if(HxOverrides.substr(text,i,s.length) == s) {
+			return s.length;
+		}
+	}
+	return 0;
+};
+zui_Zui.prototype = {
+	isScrolling: null
+	,isTyping: null
+	,enabled: null
+	,isStarted: null
+	,isPushed: null
+	,isHovered: null
+	,isReleased: null
+	,changed: null
+	,imageInvertY: null
+	,scrollEnabled: null
+	,alwaysRedraw: null
+	,highlightOnSelect: null
+	,tabSwitchEnabled: null
+	,textColoring: null
+	,windowBorderTop: null
+	,windowBorderBottom: null
+	,windowBorderLeft: null
+	,windowBorderRight: null
+	,highlightFullRow: null
+	,touchHoldActivated: null
+	,sliderTooltip: null
+	,sliderTooltipX: null
+	,sliderTooltipY: null
+	,sliderTooltipW: null
+	,inputRegistered: null
+	,inputEnabled: null
+	,inputX: null
+	,inputY: null
+	,inputStartedX: null
+	,inputStartedY: null
+	,inputDX: null
+	,inputDY: null
+	,inputWheelDelta: null
+	,inputStarted: null
+	,inputStartedR: null
+	,inputReleased: null
+	,inputReleasedR: null
+	,inputDown: null
+	,inputDownR: null
+	,penInUse: null
+	,isKeyPressed: null
+	,isKeyDown: null
+	,isShiftDown: null
+	,isCtrlDown: null
+	,isAltDown: null
+	,isADown: null
+	,isBackspaceDown: null
+	,isDeleteDown: null
+	,isEscapeDown: null
+	,isReturnDown: null
+	,isTabDown: null
+	,key: null
+	,char: null
+	,inputStartedTime: null
+	,cursorX: null
+	,highlightAnchor: null
+	,ratios: null
+	,curRatio: null
+	,xBeforeSplit: null
+	,wBeforeSplit: null
+	,g: null
+	,t: null
+	,ops: null
+	,globalG: null
+	,rtTextPipeline: null
+	,fontSize: null
+	,fontOffsetY: null
+	,arrowOffsetX: null
+	,arrowOffsetY: null
+	,titleOffsetX: null
+	,buttonOffsetY: null
+	,checkOffsetX: null
+	,checkOffsetY: null
+	,checkSelectOffsetX: null
+	,checkSelectOffsetY: null
+	,radioOffsetX: null
+	,radioOffsetY: null
+	,radioSelectOffsetX: null
+	,radioSelectOffsetY: null
+	,scrollAlign: null
+	,imageScrollAlign: null
+	,_x: null
+	,_y: null
+	,_w: null
+	,_h: null
+	,_windowX: null
+	,_windowY: null
+	,_windowW: null
+	,_windowH: null
+	,currentWindow: null
+	,windowEnded: null
+	,scrollHandle: null
+	,dragHandle: null
+	,windowHeaderW: null
+	,windowHeaderH: null
+	,restoreX: null
+	,restoreY: null
+	,textSelectedHandle: null
+	,textSelected: null
+	,submitTextHandle: null
+	,textToSubmit: null
+	,tabPressed: null
+	,tabPressedHandle: null
+	,comboSelectedHandle: null
+	,comboSelectedWindow: null
+	,comboSelectedAlign: null
+	,comboSelectedTexts: null
+	,comboSelectedLabel: null
+	,comboSelectedX: null
+	,comboSelectedY: null
+	,comboSelectedW: null
+	,comboSearchBar: null
+	,submitComboHandle: null
+	,comboToSubmit: null
+	,comboInitialValue: null
+	,tooltipText: null
+	,tooltipImg: null
+	,tooltipImgMaxWidth: null
+	,tooltipInvertY: null
+	,tooltipX: null
+	,tooltipY: null
+	,tooltipShown: null
+	,tooltipWait: null
+	,tooltipTime: null
+	,tabNames: null
+	,tabColors: null
+	,tabHandle: null
+	,tabScroll: null
+	,tabVertical: null
+	,sticky: null
+	,scissor: null
+	,elementsBaked: null
+	,checkSelectImage: null
+	,setScale: function(factor) {
+		this.ops.scaleFactor = factor;
+		this.fontSize = this.t.FONT_SIZE * this.ops.scaleFactor | 0;
+		var fontHeight = this.ops.font.height(this.fontSize);
+		this.fontOffsetY = (this.t.ELEMENT_H * this.ops.scaleFactor - fontHeight) / 2;
+		this.arrowOffsetY = (this.t.ELEMENT_H * this.ops.scaleFactor - this.t.ARROW_SIZE * this.ops.scaleFactor) / 2;
+		this.arrowOffsetX = this.arrowOffsetY;
+		this.titleOffsetX = (this.arrowOffsetX * 2 + this.t.ARROW_SIZE * this.ops.scaleFactor) / this.ops.scaleFactor;
+		this.buttonOffsetY = (this.t.ELEMENT_H * this.ops.scaleFactor - this.t.BUTTON_H * this.ops.scaleFactor) / 2;
+		this.checkOffsetY = (this.t.ELEMENT_H * this.ops.scaleFactor - this.t.CHECK_SIZE * this.ops.scaleFactor) / 2;
+		this.checkOffsetX = this.checkOffsetY;
+		this.checkSelectOffsetY = (this.t.CHECK_SIZE * this.ops.scaleFactor - this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor) / 2;
+		this.checkSelectOffsetX = this.checkSelectOffsetY;
+		this.radioOffsetY = (this.t.ELEMENT_H * this.ops.scaleFactor - this.t.CHECK_SIZE * this.ops.scaleFactor) / 2;
+		this.radioOffsetX = this.radioOffsetY;
+		this.radioSelectOffsetY = (this.t.CHECK_SIZE * this.ops.scaleFactor - this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor) / 2;
+		this.radioSelectOffsetX = this.radioSelectOffsetY;
+		this.elementsBaked = false;
+	}
+	,bakeElements: function() {
+		if(this.checkSelectImage != null) {
+			this.checkSelectImage.unload();
+		}
+		this.checkSelectImage = kha_Image.createRenderTarget(this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor | 0,this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor | 0,null,0,1);
+		var g = this.checkSelectImage.get_g2();
+		g.begin(true,0);
+		g.set_color(this.t.ACCENT_SELECT_COL);
+		g.drawLine(0,0,this.checkSelectImage.get_width(),this.checkSelectImage.get_height(),2 * this.ops.scaleFactor);
+		g.drawLine(this.checkSelectImage.get_width(),0,0,this.checkSelectImage.get_height(),2 * this.ops.scaleFactor);
+		g.end();
+		this.elementsBaked = true;
+	}
+	,remove: function() {
+		if(this.ops.autoNotifyInput) {
+			this.unregisterInput();
+		}
+	}
+	,registerInput: function() {
+		var _gthis = this;
+		if(this.inputRegistered) {
+			return;
+		}
+		kha_input_Mouse.get().notifyWindowed(this.ops.khaWindowId,$bind(this,this.onMouseDown),$bind(this,this.onMouseUp),$bind(this,this.onMouseMove),$bind(this,this.onMouseWheel));
+		if(kha_input_Pen.get() != null) {
+			kha_input_Pen.get().notify($bind(this,this.onPenDown),$bind(this,this.onPenUp),$bind(this,this.onPenMove));
+		}
+		kha_input_Keyboard.get().notify($bind(this,this.onKeyDown),$bind(this,this.onKeyUp),$bind(this,this.onKeyPress));
+		kha_System.notifyOnApplicationState(function() {
+			_gthis.inputDX = _gthis.inputDY = 0;
+		},null,null,null,null);
+		this.inputRegistered = true;
+	}
+	,unregisterInput: function() {
+		if(!this.inputRegistered) {
+			return;
+		}
+		kha_input_Mouse.get().removeWindowed(this.ops.khaWindowId,$bind(this,this.onMouseDown),$bind(this,this.onMouseUp),$bind(this,this.onMouseMove),$bind(this,this.onMouseWheel));
+		if(kha_input_Pen.get() != null) {
+			kha_input_Pen.get().remove($bind(this,this.onPenDown),$bind(this,this.onPenUp),$bind(this,this.onPenMove));
+		}
+		kha_input_Keyboard.get().remove($bind(this,this.onKeyDown),$bind(this,this.onKeyUp),$bind(this,this.onKeyPress));
+		this.endInput();
+		this.isShiftDown = this.isCtrlDown = this.isAltDown = false;
+		this.inputX = this.inputY = 0;
+		this.inputRegistered = false;
+	}
+	,begin: function(g) {
+		if(!this.elementsBaked) {
+			this.bakeElements();
+		}
+		this.changed = false;
+		this.globalG = g;
+		zui_Zui.current = this;
+		this._x = 0;
+		this._y = 0;
+		this._w = 0;
+		this._h = 0;
+	}
+	,end: function(last) {
+		if(last == null) {
+			last = true;
+		}
+		if(!this.windowEnded) {
+			this.endWindow();
+		}
+		this.drawCombo();
+		this.drawTooltip(true);
+		this.tabPressedHandle = null;
+		if(last) {
+			this.endInput();
+		}
+	}
+	,beginRegion: function(g,x,y,w) {
+		if(!this.elementsBaked) {
+			g.end();
+			this.bakeElements();
+			g.begin(false);
+		}
+		this.changed = false;
+		this.globalG = g;
+		this.g = g;
+		this.currentWindow = null;
+		this.tooltipText = "";
+		this.tooltipImg = null;
+		this._windowX = 0;
+		this._windowY = 0;
+		this._windowW = w;
+		this._x = x;
+		this._y = y;
+		this._w = w;
+	}
+	,endRegion: function(last) {
+		if(last == null) {
+			last = true;
+		}
+		this.drawTooltip(false);
+		this.tabPressedHandle = null;
+		if(last) {
+			this.endInput();
+		}
+	}
+	,beginSticky: function() {
+		this.sticky = true;
+		this._y -= this.currentWindow.scrollOffset;
+	}
+	,endSticky: function() {
+		this.sticky = false;
+		this.scissor = true;
+		this.g.scissor(0,this._y | 0,this._windowW | 0,this._windowH - this._y | 0);
+		this.windowHeaderH += this._y - this.windowHeaderH;
+		this._y += this.currentWindow.scrollOffset;
+		this.isHovered = false;
+	}
+	,endInput: function() {
+		this.isKeyPressed = false;
+		this.inputStarted = false;
+		this.inputStartedR = false;
+		this.inputReleased = false;
+		this.inputReleasedR = false;
+		this.inputDX = 0;
+		this.inputDY = 0;
+		this.inputWheelDelta = 0;
+		this.penInUse = false;
+		if(zui_Zui.keyRepeat && this.isKeyDown && kha_Scheduler.time() - zui_Zui.keyRepeatTime > 0.05) {
+			if(this.key == 8 || this.key == 46 || this.key == 37 || this.key == 39 || this.key == 38 || this.key == 40) {
+				zui_Zui.keyRepeatTime = kha_Scheduler.time();
+				this.isKeyPressed = true;
+			}
+		}
+		if(zui_Zui.touchHold && this.inputDown && this.inputX == this.inputStartedX && this.inputY == this.inputStartedY && this.inputStartedTime > 0 && kha_Scheduler.time() - this.inputStartedTime > 0.7) {
+			this.touchHoldActivated = true;
+			this.inputReleasedR = true;
+			this.inputStartedTime = 0;
+		}
+	}
+	,inputChanged: function() {
+		if(!(this.inputDX != 0 || this.inputDY != 0 || this.inputWheelDelta != 0 || this.inputStarted || this.inputStartedR || this.inputReleased || this.inputReleasedR || this.inputDown || this.inputDownR)) {
+			return this.isKeyPressed;
+		} else {
+			return true;
+		}
+	}
+	,windowDirty: function(handle,x,y,w,h) {
+		var wx = x + handle.dragX;
+		var wy = y + handle.dragY;
+		var inputChanged = this.getInputInRect(wx,wy,w,h) && this.inputChanged();
+		if(!(this.alwaysRedraw || this.isScrolling)) {
+			return inputChanged;
+		} else {
+			return true;
+		}
+	}
+	,window: function(handle,x,y,w,h,drag) {
+		if(drag == null) {
+			drag = false;
+		}
+		if(handle.texture == null || w != handle.texture.get_width() || h != handle.texture.get_height()) {
+			this.resize(handle,w,h);
+		}
+		if(!this.windowEnded) {
+			this.endWindow();
+		}
+		this.windowEnded = false;
+		this.g = handle.texture.get_g2();
+		this.currentWindow = handle;
+		this._windowX = x + handle.dragX;
+		this._windowY = y + handle.dragY;
+		this._windowW = w;
+		this._windowH = h;
+		this.windowHeaderW = 0;
+		this.windowHeaderH = 0;
+		if(this.windowDirty(handle,x,y,w,h)) {
+			handle.redraws = 2;
+		}
+		if(zui_Zui.onBorderHover != null) {
+			if(this.getInputInRect(this._windowX - 4,this._windowY,8,this._windowH)) {
+				zui_Zui.onBorderHover(handle,0);
+			} else if(this.getInputInRect(this._windowX + this._windowW - 4,this._windowY,8,this._windowH)) {
+				zui_Zui.onBorderHover(handle,1);
+			} else if(this.getInputInRect(this._windowX,this._windowY - 4,this._windowW,8)) {
+				zui_Zui.onBorderHover(handle,2);
+			} else if(this.getInputInRect(this._windowX,this._windowY + this._windowH - 4,this._windowW,8)) {
+				zui_Zui.onBorderHover(handle,3);
+			}
+		}
+		if(handle.redraws <= 0) {
+			return false;
+		}
+		this._x = 0;
+		this._y = handle.scrollOffset;
+		if(handle.layout == 1) {
+			w = this.t.ELEMENT_W * this.ops.scaleFactor | 0;
+		}
+		this._w = !handle.scrollEnabled ? w : w - (this.t.SCROLL_W * this.ops.scaleFactor | 0);
+		this._h = h;
+		this.tooltipText = "";
+		this.tooltipImg = null;
+		this.tabNames = null;
+		if(this.t.FILL_WINDOW_BG) {
+			this.g.begin(true,this.t.WINDOW_BG_COL);
+		} else {
+			this.g.begin(true,0);
+			this.g.set_color(this.t.WINDOW_BG_COL);
+			this.g.fillRect(this._x,this._y - handle.scrollOffset,handle.lastMaxX,handle.lastMaxY);
+		}
+		handle.dragEnabled = drag;
+		if(drag) {
+			if(this.inputStarted && this.getInputInRect(this._windowX,this._windowY,this._windowW,15 * this.ops.scaleFactor | 0)) {
+				this.dragHandle = handle;
+			} else if(this.inputReleased) {
+				this.dragHandle = null;
+			}
+			if(handle == this.dragHandle) {
+				handle.redraws = 2;
+				handle.dragX += this.inputDX | 0;
+				handle.dragY += this.inputDY | 0;
+			}
+			this._y += 15 * this.ops.scaleFactor | 0;
+			this.windowHeaderH += 15 * this.ops.scaleFactor | 0;
+		}
+		return true;
+	}
+	,endWindow: function(bindGlobalG) {
+		if(bindGlobalG == null) {
+			bindGlobalG = true;
+		}
+		var handle = this.currentWindow;
+		if(handle == null) {
+			return;
+		}
+		if(handle.redraws > 0 || this.isScrolling) {
+			if(this.scissor) {
+				this.scissor = false;
+				this.g.disableScissor();
+			}
+			if(this.tabNames != null) {
+				this.drawTabs();
+			}
+			if(handle.dragEnabled) {
+				this.g.set_color(this.t.SEPARATOR_COL);
+				this.g.fillRect(0,0,this._windowW,15 * this.ops.scaleFactor | 0);
+			}
+			var wh = this._windowH - this.windowHeaderH;
+			var fullHeight = this._y - handle.scrollOffset - this.windowHeaderH;
+			if(fullHeight < wh || handle.layout == 1 || !this.scrollEnabled) {
+				handle.scrollEnabled = false;
+				handle.scrollOffset = 0;
+			} else {
+				handle.scrollEnabled = true;
+				if(this.tabScroll < 0) {
+					handle.scrollOffset = this.tabScroll;
+					this.tabScroll = 0;
+				}
+				var wy = this._windowY + this.windowHeaderH;
+				var amountToScroll = fullHeight - wh;
+				var amountScrolled = -handle.scrollOffset;
+				var ratio = amountScrolled / amountToScroll;
+				var barH = wh * Math.abs(wh / fullHeight);
+				barH = Math.max(barH,this.t.ELEMENT_H * this.ops.scaleFactor);
+				var totalScrollableArea = wh - barH;
+				var e = amountToScroll / totalScrollableArea;
+				var barY = totalScrollableArea * ratio + this.windowHeaderH;
+				var barFocus = this.getInputInRect(this._windowX + this._windowW - (this.t.SCROLL_W * this.ops.scaleFactor | 0),barY + this._windowY,this.t.SCROLL_W * this.ops.scaleFactor | 0,barH);
+				if(this.inputStarted && barFocus) {
+					this.scrollHandle = handle;
+					this.isScrolling = true;
+				}
+				var scrollDelta = this.inputWheelDelta;
+				if(zui_Zui.touchScroll && this.inputDown && this.inputDY != 0 && this.inputX > this._windowX + this.windowHeaderW && this.inputY > this._windowY + this.windowHeaderH) {
+					this.isScrolling = true;
+					scrollDelta = -this.inputDY / 20;
+				}
+				if(handle == this.scrollHandle) {
+					this.scroll(this.inputDY * e,fullHeight);
+				} else if(scrollDelta != 0 && this.comboSelectedHandle == null && this.getInputInRect(this._windowX,wy,this._windowW,wh)) {
+					this.scroll(scrollDelta * (this.t.ELEMENT_H * this.ops.scaleFactor),fullHeight);
+				}
+				if(handle.scrollOffset > 0) {
+					handle.scrollOffset = 0;
+				} else if(fullHeight + handle.scrollOffset < wh) {
+					handle.scrollOffset = wh - fullHeight;
+				}
+				this.g.set_color(this.t.ACCENT_COL);
+				var scrollbarFocus = this.getInputInRect(this._windowX + this._windowW - (this.t.SCROLL_W * this.ops.scaleFactor | 0),wy,this.t.SCROLL_W * this.ops.scaleFactor | 0,wh);
+				var barW = scrollbarFocus || handle == this.scrollHandle ? this.t.SCROLL_W * this.ops.scaleFactor | 0 : (this.t.SCROLL_W * this.ops.scaleFactor | 0) / 3;
+				this.g.fillRect(this._windowW - barW - this.scrollAlign,barY,barW,barH);
+			}
+			handle.lastMaxX = this._x;
+			handle.lastMaxY = this._y;
+			if(handle.layout == 0) {
+				handle.lastMaxX += this._windowW;
+			} else {
+				handle.lastMaxY += this._windowH;
+			}
+			handle.redraws--;
+			this.g.end();
+		}
+		this.windowEnded = true;
+		if(zui_Zui.alwaysRedrawWindow || handle.redraws > -4) {
+			if(bindGlobalG) {
+				this.globalG.begin(false);
+			}
+			this.globalG.set_color(this.t.WINDOW_TINT_COL);
+			this.globalG.drawImage(handle.texture,this._windowX,this._windowY);
+			if(bindGlobalG) {
+				this.globalG.end();
+			}
+			if(handle.redraws <= 0) {
+				handle.redraws--;
+			}
+		}
+	}
+	,scroll: function(delta,fullHeight) {
+		this.currentWindow.scrollOffset -= delta;
+	}
+	,tab: function(handle,text,vertical,color) {
+		if(color == null) {
+			color = -1;
+		}
+		if(vertical == null) {
+			vertical = false;
+		}
+		if(this.tabNames == null) {
+			this.tabNames = [];
+			this.tabColors = [];
+			this.tabHandle = handle;
+			this.tabVertical = vertical;
+			this._w -= this.tabVertical ? this.t.ELEMENT_OFFSET * this.ops.scaleFactor + this.t.ELEMENT_W * this.ops.scaleFactor - this.ops.scaleFactor | 0 : 0;
+			if(vertical) {
+				this.windowHeaderW += this.t.ELEMENT_W * this.ops.scaleFactor;
+			} else {
+				this.windowHeaderH += this.t.BUTTON_H * this.ops.scaleFactor + this.buttonOffsetY + this.t.ELEMENT_OFFSET * this.ops.scaleFactor;
+			}
+			this.restoreX = this.inputX;
+			this.restoreY = this.inputY;
+			if(!vertical && this.getInputInRect(this._windowX,this._windowY,this._windowW,this.windowHeaderH)) {
+				this.inputX = this.inputY = -1;
+			}
+			if(vertical) {
+				this._x += this.windowHeaderW + 6;
+				this._w -= 6;
+			} else {
+				this._y += this.windowHeaderH + 3;
+			}
+		}
+		this.tabNames.push(text);
+		this.tabColors.push(color);
+		return handle.position == this.tabNames.length - 1;
+	}
+	,drawTabs: function() {
+		this.inputX = this.restoreX;
+		this.inputY = this.restoreY;
+		if(this.currentWindow == null) {
+			return;
+		}
+		var tabX = 0.0;
+		var tabY = 0.0;
+		var tabHMin = this.t.BUTTON_H * this.ops.scaleFactor * 1.1 | 0;
+		var headerH = this.currentWindow.dragEnabled ? 15 * this.ops.scaleFactor | 0 : 0;
+		var tabH = this.t.FULL_TABS && this.tabVertical ? (this._windowH - headerH) / this.tabNames.length | 0 : tabHMin;
+		var origy = this._y;
+		this._y = headerH;
+		this.tabHandle.changed = false;
+		if(this.isCtrlDown && this.isTabDown) {
+			this.tabHandle.position++;
+			if(this.tabHandle.position >= this.tabNames.length) {
+				this.tabHandle.position = 0;
+			}
+			this.tabHandle.changed = true;
+			this.isTabDown = false;
+		}
+		if(this.tabHandle.position >= this.tabNames.length) {
+			this.tabHandle.position = this.tabNames.length - 1;
+		}
+		this.g.set_color(this.t.SEPARATOR_COL);
+		if(this.tabVertical) {
+			this.g.fillRect(0,this._y,this.t.ELEMENT_W * this.ops.scaleFactor,this._windowH);
+		} else {
+			this.g.fillRect(0,this._y,this._windowW,this.buttonOffsetY + tabH + 2);
+		}
+		this.g.set_color(this.t.ACCENT_COL);
+		if(this.tabVertical) {
+			this.g.fillRect(this.t.ELEMENT_W * this.ops.scaleFactor,this._y,1,this._windowH);
+		} else {
+			this.g.fillRect(this.buttonOffsetY,this._y + this.buttonOffsetY + tabH + 2,this._windowW - this.buttonOffsetY * 2,1);
+		}
+		var basey = this.tabVertical ? this._y : this._y + 2;
+		var _g = 0;
+		var _g1 = this.tabNames.length;
+		while(_g < _g1) {
+			var i = _g++;
+			this._x = tabX;
+			this._y = basey + tabY;
+			this._w = this.tabVertical ? this.t.ELEMENT_W * this.ops.scaleFactor - this.ops.scaleFactor | 0 : this.t.FULL_TABS ? this._windowW / this.tabNames.length | 0 : this.ops.font.width(this.fontSize,this.tabNames[i]) + this.buttonOffsetY * 2 + 18 * this.ops.scaleFactor | 0;
+			var released = this.getReleased(tabH);
+			var pushed = this.getPushed(tabH);
+			var hover = this.getHover(tabH);
+			if(released) {
+				var h = this.tabHandle.nest(this.tabHandle.position);
+				h.scrollOffset = this.currentWindow.scrollOffset;
+				h = this.tabHandle.nest(i);
+				this.tabScroll = h.scrollOffset;
+				this.tabHandle.position = i;
+				this.currentWindow.redraws = 3;
+				this.tabHandle.changed = true;
+			}
+			var selected = this.tabHandle.position == i;
+			this.g.set_color(pushed || hover ? this.t.BUTTON_HOVER_COL : this.tabColors[i] != -1 ? this.tabColors[i] : selected ? this.t.WINDOW_BG_COL : this.t.SEPARATOR_COL);
+			if(this.tabVertical) {
+				tabY += tabH + 1;
+			} else {
+				tabX += this._w + 1;
+			}
+			var g = this.g;
+			var x = this._x + this.buttonOffsetY;
+			var y = this._y + this.buttonOffsetY;
+			var w = this._w;
+			var strength = 0.0;
+			if(strength == 0.0) {
+				strength = 1;
+			}
+			if(!this.enabled) {
+				this.fadeColor();
+			}
+			g.fillRect(x,y - 1,w,tabH + 1);
+			this.g.set_color(selected ? this.t.BUTTON_TEXT_COL : this.t.LABEL_COL);
+			this.drawString(this.g,this.tabNames[i],null,(tabH - tabHMin) / 2,this.t.FULL_TABS ? 1 : 0);
+			if(selected) {
+				if(this.tabVertical) {
+					this.g.set_color(this.t.HIGHLIGHT_COL);
+					this.g.fillRect(this._x + this.buttonOffsetY,this._y + this.buttonOffsetY - 1,2,tabH + this.buttonOffsetY);
+				} else {
+					this.g.set_color(this.t.WINDOW_BG_COL);
+					this.g.fillRect(this._x + this.buttonOffsetY + 1,this._y + this.buttonOffsetY + tabH,this._w - 1,1);
+					this.g.set_color(this.t.HIGHLIGHT_COL);
+					this.g.fillRect(this._x + this.buttonOffsetY,this._y + this.buttonOffsetY,this._w,2);
+				}
+			}
+		}
+		this._x = 0;
+		this._y = origy;
+		this._w = (!this.currentWindow.scrollEnabled ? this._windowW : this._windowW - (this.t.SCROLL_W * this.ops.scaleFactor | 0)) | 0;
+	}
+	,panel: function(handle,text,isTree,filled,pack) {
+		if(pack == null) {
+			pack = true;
+		}
+		if(filled == null) {
+			filled = true;
+		}
+		if(isTree == null) {
+			isTree = false;
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return handle.selected;
+		}
+		if(this.getReleased()) {
+			handle.selected = !handle.selected;
+			handle.changed = this.changed = true;
+		}
+		if(filled) {
+			this.g.set_color(this.t.PANEL_BG_COL);
+			var g = this.g;
+			var x = this._x;
+			var y = this._y;
+			var w = this._w;
+			var h = this.t.ELEMENT_H * this.ops.scaleFactor;
+			var strength = 0.0;
+			if(strength == 0.0) {
+				strength = 1;
+			}
+			if(!this.enabled) {
+				this.fadeColor();
+			}
+			g.fillRect(x,y - 1,w,h + 1);
+		}
+		if(isTree) {
+			this.drawTree(handle.selected);
+		} else {
+			this.drawArrow(handle.selected);
+		}
+		this.g.set_color(this.t.LABEL_COL);
+		this.drawString(this.g,text,this.titleOffsetX,0);
+		this.endElement();
+		if(pack && !handle.selected) {
+			this._y -= this.t.ELEMENT_OFFSET * this.ops.scaleFactor;
+		}
+		return handle.selected;
+	}
+	,image: function(image,tint,h,sx,sy,sw,sh) {
+		if(sh == null) {
+			sh = 0;
+		}
+		if(sw == null) {
+			sw = 0;
+		}
+		if(sy == null) {
+			sy = 0;
+		}
+		if(sx == null) {
+			sx = 0;
+		}
+		if(tint == null) {
+			tint = -1;
+		}
+		var iw = (sw > 0 ? sw : image.get_width()) * this.ops.scaleFactor;
+		var ih = (sh > 0 ? sh : image.get_height()) * this.ops.scaleFactor;
+		var w = Math.min(iw,this._w);
+		var x = this._x;
+		var scroll = this.currentWindow != null && this.currentWindow.scrollEnabled;
+		var r;
+		if(this.curRatio == -1) {
+			r = 1.0;
+		} else {
+			var ratio = this.ratios[this.curRatio];
+			r = ratio < 0 ? -ratio : ratio;
+		}
+		if(this.imageScrollAlign) {
+			w = Math.min(iw,this._w - this.buttonOffsetY * 2);
+			x += this.buttonOffsetY;
+			if(!scroll) {
+				w -= (this.t.SCROLL_W * this.ops.scaleFactor | 0) * r;
+				x += (this.t.SCROLL_W * this.ops.scaleFactor | 0) * r / 2;
+			}
+		} else if(scroll) {
+			w += (this.t.SCROLL_W * this.ops.scaleFactor | 0) * r;
+		}
+		var ratio = h == null ? w / iw : h / ih;
+		if(h == null) {
+			h = ih * ratio;
+		} else {
+			w = iw * ratio;
+		}
+		if(!this.isVisible(h)) {
+			this.endElement(h);
+			return 0;
+		}
+		var started = this.getStarted(h);
+		var down = this.getPushed(h);
+		var released = this.getReleased(h);
+		var hover = this.getHover(h);
+		if(this.curRatio == -1 && (started || down || released || hover)) {
+			if(this.inputX < this._windowX + this._x || this.inputX > this._windowX + this._x + w) {
+				hover = false;
+				released = hover;
+				down = released;
+				started = down;
+			}
+		}
+		this.g.set_color(tint);
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		var h_float = h;
+		if(sw > 0) {
+			if(this.imageInvertY) {
+				this.g.drawScaledSubImage(image,sx,sy,sw,sh,x,this._y + h_float,w,-h_float);
+			} else {
+				this.g.drawScaledSubImage(image,sx,sy,sw,sh,x,this._y,w,h_float);
+			}
+		} else if(this.imageInvertY) {
+			this.g.drawScaledImage(image,x,this._y + h_float,w,-h_float);
+		} else {
+			this.g.drawScaledImage(image,x,this._y,w,h_float);
+		}
+		this.endElement(h);
+		if(started) {
+			return 1;
+		} else if(released) {
+			return 3;
+		} else if(down) {
+			return 2;
+		} else if(hover) {
+			return 4;
+		} else {
+			return 0;
+		}
+	}
+	,text: function(text,align,bg) {
+		if(bg == null) {
+			bg = 0;
+		}
+		if(align == null) {
+			align = 0;
+		}
+		if(text.indexOf("\n") >= 0) {
+			var align1 = align;
+			var bg1 = bg;
+			if(bg1 == null) {
+				bg1 = 0;
+			}
+			if(align1 == null) {
+				align1 = 0;
+			}
+			var _g = 0;
+			var _g1 = text.split("\n");
+			while(_g < _g1.length) {
+				var line = _g1[_g];
+				++_g;
+				this.text(line,align1,bg1);
+			}
+			return 0;
+		}
+		var h = Math.max(this.t.ELEMENT_H * this.ops.scaleFactor,this.ops.font.height(this.fontSize));
+		if(!this.isVisible(h)) {
+			this.endElement(h + this.t.ELEMENT_OFFSET * this.ops.scaleFactor);
+			return 0;
+		}
+		var started = this.getStarted(h);
+		var down = this.getPushed(h);
+		var released = this.getReleased(h);
+		var hover = this.getHover(h);
+		if(bg != 0) {
+			this.g.set_color(bg);
+			this.g.fillRect(this._x + this.buttonOffsetY,this._y + this.buttonOffsetY,this._w - this.buttonOffsetY * 2,this.t.BUTTON_H * this.ops.scaleFactor);
+		}
+		this.g.set_color(this.t.TEXT_COL);
+		this.drawString(this.g,text,null,0,align);
+		this.endElement(h + this.t.ELEMENT_OFFSET * this.ops.scaleFactor);
+		if(started) {
+			return 1;
+		} else if(released) {
+			return 3;
+		} else if(down) {
+			return 2;
+		} else {
+			return 0;
+		}
+	}
+	,splitText: function(lines,align,bg) {
+		if(bg == null) {
+			bg = 0;
+		}
+		if(align == null) {
+			align = 0;
+		}
+		var _g = 0;
+		var _g1 = lines.split("\n");
+		while(_g < _g1.length) {
+			var line = _g1[_g];
+			++_g;
+			this.text(line,align,bg);
+		}
+	}
+	,startTextEdit: function(handle,align) {
+		if(align == null) {
+			align = 0;
+		}
+		this.isTyping = true;
+		this.submitTextHandle = this.textSelectedHandle;
+		this.textToSubmit = this.textSelected;
+		this.textSelectedHandle = handle;
+		this.textSelected = handle.text;
+		this.cursorX = handle.text.length;
+		if(this.tabPressed) {
+			this.tabPressed = false;
+			this.isKeyPressed = false;
+		} else if(!this.highlightOnSelect) {
+			this.setCursorToInput(align);
+		}
+		this.tabPressedHandle = handle;
+		this.highlightAnchor = this.highlightOnSelect ? 0 : this.cursorX;
+		if(kha_input_Keyboard.get() != null) {
+			kha_input_Keyboard.get().show();
+		}
+	}
+	,submitTextEdit: function() {
+		this.submitTextHandle.changed = this.submitTextHandle.text != this.textToSubmit;
+		this.submitTextHandle.text = this.textToSubmit;
+		this.submitTextHandle = null;
+		this.textToSubmit = "";
+		this.textSelected = "";
+	}
+	,updateTextEdit: function(align,editable,liveUpdate) {
+		if(liveUpdate == null) {
+			liveUpdate = false;
+		}
+		if(editable == null) {
+			editable = true;
+		}
+		if(align == null) {
+			align = 0;
+		}
+		var text = this.textSelected;
+		if(this.isKeyPressed) {
+			if(this.key == 37) {
+				if(this.cursorX > 0) {
+					this.cursorX--;
+				}
+			} else if(this.key == 39) {
+				if(this.cursorX < text.length) {
+					this.cursorX++;
+				}
+			} else if(editable && this.key == 8) {
+				if(this.cursorX > 0 && this.highlightAnchor == this.cursorX) {
+					text = HxOverrides.substr(text,0,this.cursorX - 1) + HxOverrides.substr(text,this.cursorX,text.length);
+					this.cursorX--;
+				} else if(this.highlightAnchor < this.cursorX) {
+					text = HxOverrides.substr(text,0,this.highlightAnchor) + HxOverrides.substr(text,this.cursorX,text.length);
+					this.cursorX = this.highlightAnchor;
+				} else {
+					text = HxOverrides.substr(text,0,this.cursorX) + HxOverrides.substr(text,this.highlightAnchor,text.length);
+				}
+			} else if(editable && this.key == 46) {
+				if(this.highlightAnchor == this.cursorX) {
+					text = HxOverrides.substr(text,0,this.cursorX) + HxOverrides.substr(text,this.cursorX + 1,null);
+				} else if(this.highlightAnchor < this.cursorX) {
+					text = HxOverrides.substr(text,0,this.highlightAnchor) + HxOverrides.substr(text,this.cursorX,text.length);
+					this.cursorX = this.highlightAnchor;
+				} else {
+					text = HxOverrides.substr(text,0,this.cursorX) + HxOverrides.substr(text,this.highlightAnchor,text.length);
+				}
+			} else if(this.key == 13) {
+				this.deselectText();
+			} else if(this.key == 27) {
+				this.textSelected = this.textSelectedHandle.text;
+				this.deselectText();
+			} else if(this.key == 9 && this.tabSwitchEnabled && !this.isCtrlDown) {
+				this.tabPressed = true;
+				this.deselectText();
+				this.key = null;
+			} else if(this.key == 36) {
+				this.cursorX = 0;
+			} else if(this.key == 35) {
+				this.cursorX = text.length;
+			} else if(this.isCtrlDown && this.isADown) {
+				this.cursorX = text.length;
+				this.highlightAnchor = 0;
+			} else if(editable && this.key != 16 && this.key != 20 && this.key != 17 && this.key != 224 && this.key != 18 && this.key != 38 && this.key != 40 && this.char != null && this.char != "" && HxOverrides.cca(this.char,0) >= 32) {
+				text = HxOverrides.substr(text,0,this.highlightAnchor) + this.char + HxOverrides.substr(text,this.cursorX,null);
+				this.cursorX = this.cursorX + 1 > text.length ? text.length : this.cursorX + 1;
+			}
+			var selecting = this.isShiftDown && (this.key == 37 || this.key == 39 || this.key == 16);
+			if(!selecting && (!this.isCtrlDown || this.isCtrlDown && this.isAltDown)) {
+				this.highlightAnchor = this.cursorX;
+			}
+		}
+		if(editable && zui_Zui.textToPaste != "") {
+			text = HxOverrides.substr(text,0,this.highlightAnchor) + zui_Zui.textToPaste + HxOverrides.substr(text,this.cursorX,null);
+			this.cursorX += zui_Zui.textToPaste.length;
+			this.highlightAnchor = this.cursorX;
+			zui_Zui.textToPaste = "";
+			zui_Zui.isPaste = false;
+		}
+		if(this.highlightAnchor == this.cursorX) {
+			zui_Zui.textToCopy = text;
+		} else if(this.highlightAnchor < this.cursorX) {
+			zui_Zui.textToCopy = text.substring(this.highlightAnchor,this.cursorX);
+		} else {
+			zui_Zui.textToCopy = text.substring(this.cursorX,this.highlightAnchor);
+		}
+		if(editable && zui_Zui.isCut) {
+			if(this.highlightAnchor == this.cursorX) {
+				text = "";
+			} else if(this.highlightAnchor < this.cursorX) {
+				text = HxOverrides.substr(text,0,this.highlightAnchor) + HxOverrides.substr(text,this.cursorX,text.length);
+				this.cursorX = this.highlightAnchor;
+			} else {
+				text = HxOverrides.substr(text,0,this.cursorX) + HxOverrides.substr(text,this.highlightAnchor,text.length);
+			}
+		}
+		var off = this.t.TEXT_OFFSET * this.ops.scaleFactor;
+		var lineHeight = this.t.ELEMENT_H * this.ops.scaleFactor;
+		var cursorHeight = lineHeight - this.buttonOffsetY * 3.0;
+		if(this.highlightAnchor != this.cursorX) {
+			var istart = this.cursorX;
+			var iend = this.highlightAnchor;
+			if(this.highlightAnchor < this.cursorX) {
+				istart = this.highlightAnchor;
+				iend = this.cursorX;
+			}
+			var hlstr = HxOverrides.substr(text,istart,iend - istart);
+			var hlstrw = this.ops.font.width(this.fontSize,hlstr);
+			var startoff = this.ops.font.width(this.fontSize,HxOverrides.substr(text,0,istart));
+			var hlStart = align == 0 ? this._x + startoff + off : this._x + this._w - hlstrw - off;
+			if(align == 2) {
+				hlStart -= this.ops.font.width(this.fontSize,HxOverrides.substr(text,iend,text.length));
+			}
+			this.g.set_color(this.t.ACCENT_SELECT_COL);
+			this.g.fillRect(hlStart,this._y + this.buttonOffsetY * 1.5,hlstrw,cursorHeight);
+		}
+		var str = align == 0 ? HxOverrides.substr(text,0,this.cursorX) : text.substring(this.cursorX,text.length);
+		var strw = this.ops.font.width(this.fontSize,str);
+		var cursorX = align == 0 ? this._x + strw + off : this._x + this._w - strw - off;
+		this.g.set_color(this.t.TEXT_COL);
+		this.g.fillRect(cursorX,this._y + this.buttonOffsetY * 1.5,2 * this.ops.scaleFactor,cursorHeight);
+		this.textSelected = text;
+		if(liveUpdate && this.textSelectedHandle != null) {
+			this.textSelectedHandle.changed = this.textSelectedHandle.text != this.textSelected;
+			this.textSelectedHandle.text = this.textSelected;
+		}
+	}
+	,textInput: function(handle,label,align,editable,liveUpdate) {
+		if(liveUpdate == null) {
+			liveUpdate = false;
+		}
+		if(editable == null) {
+			editable = true;
+		}
+		if(align == null) {
+			align = 0;
+		}
+		if(label == null) {
+			label = "";
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return handle.text;
+		}
+		var hover = this.getHover();
+		if(hover && zui_Zui.onTextHover != null) {
+			zui_Zui.onTextHover();
+		}
+		this.g.set_color(hover ? this.t.ACCENT_HOVER_COL : this.t.ACCENT_COL);
+		var g = this.g;
+		var fill = this.t.FILL_ACCENT_BG;
+		var x = this._x + this.buttonOffsetY;
+		var y = this._y + this.buttonOffsetY;
+		var w = this._w - this.buttonOffsetY * 2;
+		var h = this.t.BUTTON_H * this.ops.scaleFactor;
+		var strength = 0.0;
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		if(fill) {
+			g.fillRect(x,y - 1,w,h + 1);
+		} else {
+			g.drawRect(x,y,w,h,strength);
+		}
+		var released = this.getReleased();
+		if(this.submitTextHandle == handle && released) {
+			this.isTyping = true;
+			this.textSelectedHandle = this.submitTextHandle;
+			this.submitTextHandle = null;
+			this.setCursorToInput(align);
+		}
+		var startEdit = released || this.tabPressed;
+		handle.changed = false;
+		if(this.textSelectedHandle != handle && startEdit) {
+			this.startTextEdit(handle,align);
+		}
+		if(this.textSelectedHandle == handle) {
+			this.updateTextEdit(align,editable,liveUpdate);
+		}
+		if(this.submitTextHandle == handle) {
+			this.submitTextEdit();
+		}
+		if(label != "") {
+			this.g.set_color(this.t.LABEL_COL);
+			var labelAlign = align == 2 ? 0 : 2;
+			this.drawString(this.g,label,labelAlign == 0 ? null : 0,0,labelAlign);
+		}
+		this.g.set_color(this.t.TEXT_COL);
+		if(this.textSelectedHandle != handle) {
+			this.drawString(this.g,handle.text,null,0,align);
+		} else {
+			this.drawString(this.g,this.textSelected,null,0,align,false);
+		}
+		this.endElement();
+		return handle.text;
+	}
+	,setCursorToInput: function(align) {
+		var off = align == 0 ? this.t.TEXT_OFFSET * this.ops.scaleFactor : this._w - this.ops.font.width(this.fontSize,this.textSelected);
+		var x = this.inputX - (this._windowX + this._x + off);
+		this.cursorX = 0;
+		while(this.cursorX < this.textSelected.length && this.ops.font.width(this.fontSize,HxOverrides.substr(this.textSelected,0,this.cursorX)) < x) this.cursorX++;
+		this.highlightAnchor = this.cursorX;
+	}
+	,deselectText: function() {
+		if(this.textSelectedHandle == null) {
+			return;
+		}
+		this.submitTextHandle = this.textSelectedHandle;
+		this.textToSubmit = this.textSelected;
+		this.textSelectedHandle = null;
+		this.isTyping = false;
+		if(this.currentWindow != null) {
+			this.currentWindow.redraws = 2;
+		}
+		if(kha_input_Keyboard.get() != null) {
+			kha_input_Keyboard.get().hide();
+		}
+		this.highlightAnchor = this.cursorX;
+		if(zui_Zui.onDeselectText != null) {
+			zui_Zui.onDeselectText();
+		}
+	}
+	,button: function(text,align,label) {
+		if(label == null) {
+			label = "";
+		}
+		if(align == null) {
+			align = 1;
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return false;
+		}
+		var released = this.getReleased();
+		var pushed = this.getPushed();
+		var hover = this.getHover();
+		if(released) {
+			this.changed = true;
+		}
+		this.g.set_color(pushed ? this.t.BUTTON_PRESSED_COL : hover ? this.t.BUTTON_HOVER_COL : this.t.BUTTON_COL);
+		var g = this.g;
+		var fill = this.t.FILL_BUTTON_BG;
+		var x = this._x + this.buttonOffsetY;
+		var y = this._y + this.buttonOffsetY;
+		var w = this._w - this.buttonOffsetY * 2;
+		var h = this.t.BUTTON_H * this.ops.scaleFactor;
+		var strength = 0.0;
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		if(fill) {
+			g.fillRect(x,y - 1,w,h + 1);
+		} else {
+			g.drawRect(x,y,w,h,strength);
+		}
+		this.g.set_color(this.t.BUTTON_TEXT_COL);
+		this.drawString(this.g,text,null,0,align);
+		if(label != "") {
+			this.g.set_color(this.t.LABEL_COL);
+			this.drawString(this.g,label,null,0,align == 2 ? 0 : 2);
+		}
+		this.endElement();
+		return released;
+	}
+	,check: function(handle,text,label) {
+		if(label == null) {
+			label = "";
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return handle.selected;
+		}
+		if(this.getReleased()) {
+			handle.selected = !handle.selected;
+			handle.changed = this.changed = true;
+		} else {
+			handle.changed = false;
+		}
+		var hover = this.getHover();
+		this.drawCheck(handle.selected,hover);
+		this.g.set_color(this.t.TEXT_COL);
+		this.drawString(this.g,text,this.titleOffsetX,0,0);
+		if(label != "") {
+			this.g.set_color(this.t.LABEL_COL);
+			this.drawString(this.g,label,null,0,2);
+		}
+		this.endElement();
+		return handle.selected;
+	}
+	,radio: function(handle,position,text,label) {
+		if(label == null) {
+			label = "";
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return handle.position == position;
+		}
+		if(position == 0) {
+			handle.changed = false;
+		}
+		if(this.getReleased()) {
+			handle.position = position;
+			handle.changed = this.changed = true;
+		}
+		var hover = this.getHover();
+		this.drawRadio(handle.position == position,hover);
+		this.g.set_color(this.t.TEXT_COL);
+		this.drawString(this.g,text,this.titleOffsetX,0);
+		if(label != "") {
+			this.g.set_color(this.t.LABEL_COL);
+			this.drawString(this.g,label,null,0,2);
+		}
+		this.endElement();
+		return handle.position == position;
+	}
+	,combo: function(handle,texts,label,showLabel,align,searchBar) {
+		if(searchBar == null) {
+			searchBar = true;
+		}
+		if(align == null) {
+			align = 0;
+		}
+		if(showLabel == null) {
+			showLabel = false;
+		}
+		if(label == null) {
+			label = "";
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return handle.position;
+		}
+		if(this.getReleased()) {
+			if(this.comboSelectedHandle == null) {
+				this.inputEnabled = false;
+				this.comboSelectedHandle = handle;
+				this.comboSelectedWindow = this.currentWindow;
+				this.comboSelectedAlign = align;
+				this.comboSelectedTexts = texts;
+				this.comboSelectedLabel = label;
+				this.comboSelectedX = this._x + this._windowX | 0;
+				this.comboSelectedY = this._y + this._windowY + this.t.ELEMENT_H * this.ops.scaleFactor | 0;
+				this.comboSelectedW = this._w | 0;
+				this.comboSearchBar = searchBar;
+				var _g = 0;
+				while(_g < texts.length) {
+					var t = texts[_g];
+					++_g;
+					var w = (this.ops.font.width(this.fontSize,t) | 0) + 10;
+					if(this.comboSelectedW < w) {
+						this.comboSelectedW = w;
+					}
+				}
+				if(this.comboSelectedW > this._w * 2) {
+					this.comboSelectedW = this._w * 2 | 0;
+				}
+				if(this.comboSelectedW > this._w) {
+					this.comboSelectedW += this.t.TEXT_OFFSET * this.ops.scaleFactor | 0;
+				}
+				this.comboToSubmit = handle.position;
+				this.comboInitialValue = handle.position;
+			}
+		}
+		if(handle == this.comboSelectedHandle && (this.isEscapeDown || this.inputReleasedR)) {
+			handle.position = this.comboInitialValue;
+			handle.changed = this.changed = true;
+			this.submitComboHandle = null;
+		} else if(handle == this.submitComboHandle) {
+			handle.position = this.comboToSubmit;
+			this.submitComboHandle = null;
+			handle.changed = this.changed = true;
+		} else {
+			handle.changed = false;
+		}
+		var hover = this.getHover();
+		if(hover) {
+			this.g.set_color(this.t.ACCENT_HOVER_COL);
+			var g = this.g;
+			var fill = this.t.FILL_ACCENT_BG;
+			var x = this._x + this.buttonOffsetY;
+			var y = this._y + this.buttonOffsetY;
+			var w = this._w - this.buttonOffsetY * 2;
+			var h = this.t.BUTTON_H * this.ops.scaleFactor;
+			var strength = 0.0;
+			if(strength == 0.0) {
+				strength = 1;
+			}
+			if(!this.enabled) {
+				this.fadeColor();
+			}
+			if(fill) {
+				g.fillRect(x,y - 1,w,h + 1);
+			} else {
+				g.drawRect(x,y,w,h,strength);
+			}
+		} else {
+			this.g.set_color(this.t.ACCENT_COL);
+			var g = this.g;
+			var fill = this.t.FILL_ACCENT_BG;
+			var x = this._x + this.buttonOffsetY;
+			var y = this._y + this.buttonOffsetY;
+			var w = this._w - this.buttonOffsetY * 2;
+			var h = this.t.BUTTON_H * this.ops.scaleFactor;
+			var strength = 0.0;
+			if(strength == 0.0) {
+				strength = 1;
+			}
+			if(!this.enabled) {
+				this.fadeColor();
+			}
+			if(fill) {
+				g.fillRect(x,y - 1,w,h + 1);
+			} else {
+				g.drawRect(x,y,w,h,strength);
+			}
+		}
+		var x = this._x + this._w - this.arrowOffsetX - 8;
+		var y = this._y + this.arrowOffsetY + 3;
+		this.g.fillTriangle(x,y,x + this.t.ARROW_SIZE * this.ops.scaleFactor,y,x + this.t.ARROW_SIZE * this.ops.scaleFactor / 2,y + this.t.ARROW_SIZE * this.ops.scaleFactor / 2);
+		if(showLabel && label != "") {
+			if(align == 0) {
+				this._x -= 15;
+			}
+			this.g.set_color(this.t.LABEL_COL);
+			this.drawString(this.g,label,null,0,align == 0 ? 2 : 0);
+			if(align == 0) {
+				this._x += 15;
+			}
+		}
+		if(align == 2) {
+			this._x -= 15;
+		}
+		this.g.set_color(this.t.TEXT_COL);
+		if(handle.position < texts.length) {
+			this.drawString(this.g,texts[handle.position],null,0,align);
+		}
+		if(align == 2) {
+			this._x += 15;
+		}
+		this.endElement();
+		return handle.position;
+	}
+	,slider: function(handle,text,from,to,filled,precision,displayValue,align,textEdit) {
+		if(textEdit == null) {
+			textEdit = true;
+		}
+		if(align == null) {
+			align = 2;
+		}
+		if(displayValue == null) {
+			displayValue = true;
+		}
+		if(precision == null) {
+			precision = 100.0;
+		}
+		if(filled == null) {
+			filled = false;
+		}
+		if(to == null) {
+			to = 1.0;
+		}
+		if(from == null) {
+			from = 0.0;
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this.endElement();
+			return handle.value;
+		}
+		if(this.getStarted()) {
+			this.scrollHandle = handle;
+			this.isScrolling = true;
+			this.changed = handle.changed = true;
+			if(zui_Zui.touchTooltip) {
+				this.sliderTooltip = true;
+				this.sliderTooltipX = this._x + this._windowX;
+				this.sliderTooltipY = this._y + this._windowY;
+				this.sliderTooltipW = this._w;
+			}
+		} else {
+			handle.changed = false;
+		}
+		if(handle == this.scrollHandle && this.inputDX != 0) {
+			var range = to - from;
+			var sliderX = this._x + this._windowX + this.buttonOffsetY;
+			var sliderW = this._w - this.buttonOffsetY * 2;
+			var step = range / sliderW;
+			var value = from + (this.inputX - sliderX) * step;
+			handle.value = Math.round(value * precision) / precision;
+			if(handle.value < from) {
+				handle.value = from;
+			} else if(handle.value > to) {
+				handle.value = to;
+			}
+			handle.changed = this.changed = true;
+		}
+		var hover = this.getHover();
+		this.drawSlider(handle.value,from,to,filled,hover);
+		var startEdit = (this.getReleased() || this.tabPressed) && textEdit;
+		if(startEdit) {
+			handle.text = handle.value + "";
+			this.startTextEdit(handle);
+			handle.changed = this.changed = true;
+		}
+		var lalign = align == 0 ? 2 : 0;
+		if(this.textSelectedHandle == handle) {
+			this.updateTextEdit(lalign);
+		}
+		if(this.submitTextHandle == handle) {
+			this.submitTextEdit();
+			try {
+				var code = handle.text;
+				handle.value = eval(code);
+			} catch( _g ) {
+			}
+			handle.changed = this.changed = true;
+		}
+		this.g.set_color(this.t.LABEL_COL);
+		this.drawString(this.g,text,null,0,align);
+		if(displayValue) {
+			this.g.set_color(this.t.TEXT_COL);
+			if(this.textSelectedHandle != handle) {
+				this.drawString(this.g,Math.round(handle.value * precision) / precision + "",null,0,lalign);
+			} else {
+				this.drawString(this.g,this.textSelected,null,0,lalign);
+			}
+		}
+		this.endElement();
+		return handle.value;
+	}
+	,separator: function(h,fill) {
+		if(fill == null) {
+			fill = true;
+		}
+		if(h == null) {
+			h = 4;
+		}
+		if(!this.isVisible(this.t.ELEMENT_H * this.ops.scaleFactor)) {
+			this._y += h * this.ops.scaleFactor;
+			return;
+		}
+		if(fill) {
+			this.g.set_color(this.t.SEPARATOR_COL);
+			this.g.fillRect(this._x,this._y,this._w,h * this.ops.scaleFactor);
+		}
+		this._y += h * this.ops.scaleFactor;
+	}
+	,tooltip: function(text) {
+		this.tooltipText = text;
+		this.tooltipY = this._y + this._windowY;
+	}
+	,tooltipImage: function(image,maxWidth) {
+		this.tooltipImg = image;
+		this.tooltipImgMaxWidth = maxWidth;
+		this.tooltipInvertY = this.imageInvertY;
+		this.tooltipY = this._y + this._windowY;
+	}
+	,drawArrow: function(selected) {
+		var x = this._x + this.arrowOffsetX;
+		var y = this._y + this.arrowOffsetY;
+		this.g.set_color(this.t.TEXT_COL);
+		if(selected) {
+			this.g.fillTriangle(x,y,x + this.t.ARROW_SIZE * this.ops.scaleFactor,y,x + this.t.ARROW_SIZE * this.ops.scaleFactor / 2,y + this.t.ARROW_SIZE * this.ops.scaleFactor);
+		} else {
+			this.g.fillTriangle(x,y,x,y + this.t.ARROW_SIZE * this.ops.scaleFactor,x + this.t.ARROW_SIZE * this.ops.scaleFactor,y + this.t.ARROW_SIZE * this.ops.scaleFactor / 2);
+		}
+	}
+	,drawTree: function(selected) {
+		var SIGN_W = 7 * this.ops.scaleFactor;
+		var x = this._x + this.arrowOffsetX + 1;
+		var y = this._y + this.arrowOffsetY + 1;
+		this.g.set_color(this.t.TEXT_COL);
+		if(selected) {
+			this.g.fillRect(x,y + SIGN_W / 2 - 1,SIGN_W,SIGN_W / 8);
+		} else {
+			this.g.fillRect(x,y + SIGN_W / 2 - 1,SIGN_W,SIGN_W / 8);
+			this.g.fillRect(x + SIGN_W / 2 - 1,y,SIGN_W / 8,SIGN_W);
+		}
+	}
+	,drawCheck: function(selected,hover) {
+		var x = this._x + this.checkOffsetX;
+		var y = this._y + this.checkOffsetY;
+		this.g.set_color(hover ? this.t.ACCENT_HOVER_COL : this.t.ACCENT_COL);
+		var g = this.g;
+		var fill = this.t.FILL_ACCENT_BG;
+		var w = this.t.CHECK_SIZE * this.ops.scaleFactor;
+		var h = this.t.CHECK_SIZE * this.ops.scaleFactor;
+		var strength = 0.0;
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		if(fill) {
+			g.fillRect(x,y - 1,w,h + 1);
+		} else {
+			g.drawRect(x,y,w,h,strength);
+		}
+		if(selected) {
+			this.g.set_color(-1);
+			if(!this.enabled) {
+				this.fadeColor();
+			}
+			var size = this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor | 0;
+			this.g.drawScaledImage(this.checkSelectImage,x + this.checkSelectOffsetX,y + this.checkSelectOffsetY,size,size);
+		}
+	}
+	,drawRadio: function(selected,hover) {
+		var x = this._x + this.radioOffsetX;
+		var y = this._y + this.radioOffsetY;
+		this.g.set_color(hover ? this.t.ACCENT_HOVER_COL : this.t.ACCENT_COL);
+		var g = this.g;
+		var fill = this.t.FILL_ACCENT_BG;
+		var w = this.t.CHECK_SIZE * this.ops.scaleFactor;
+		var h = this.t.CHECK_SIZE * this.ops.scaleFactor;
+		var strength = 0.0;
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		if(fill) {
+			g.fillRect(x,y - 1,w,h + 1);
+		} else {
+			g.drawRect(x,y,w,h,strength);
+		}
+		if(selected) {
+			this.g.set_color(this.t.ACCENT_SELECT_COL);
+			if(!this.enabled) {
+				this.fadeColor();
+			}
+			this.g.fillRect(x + this.radioSelectOffsetX,y + this.radioSelectOffsetY,this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor,this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor);
+		}
+	}
+	,drawSlider: function(value,from,to,filled,hover) {
+		var x = this._x + this.buttonOffsetY;
+		var y = this._y + this.buttonOffsetY;
+		var w = this._w - this.buttonOffsetY * 2;
+		this.g.set_color(hover ? this.t.ACCENT_HOVER_COL : this.t.ACCENT_COL);
+		var g = this.g;
+		var fill = this.t.FILL_ACCENT_BG;
+		var h = this.t.BUTTON_H * this.ops.scaleFactor;
+		var strength = 0.0;
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		if(fill) {
+			g.fillRect(x,y - 1,w,h + 1);
+		} else {
+			g.drawRect(x,y,w,h,strength);
+		}
+		this.g.set_color(hover ? this.t.ACCENT_HOVER_COL : this.t.ACCENT_COL);
+		var offset = (value - from) / (to - from);
+		var barW = 8 * this.ops.scaleFactor;
+		var sliderX = filled ? x : x + (w - barW) * offset;
+		sliderX = Math.max(Math.min(sliderX,x + (w - barW)),x);
+		var sliderW = filled ? w * offset : barW;
+		sliderW = Math.max(Math.min(sliderW,w),0);
+		var g = this.g;
+		var h = this.t.BUTTON_H * this.ops.scaleFactor;
+		var strength = 0.0;
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		g.fillRect(sliderX,y - 1,sliderW,h + 1);
+	}
+	,drawCombo: function() {
+		if(this.comboSelectedHandle == null) {
+			return;
+		}
+		var _g = this.g;
+		this.globalG.set_color(this.t.SEPARATOR_COL);
+		this.globalG.begin(false);
+		var comboH = (this.comboSelectedTexts.length + (this.comboSelectedLabel != "" ? 1 : 0) + (this.comboSearchBar ? 1 : 0)) * (this.t.ELEMENT_H * this.ops.scaleFactor | 0);
+		var distTop = this.comboSelectedY - comboH - (this.t.ELEMENT_H * this.ops.scaleFactor | 0) - this.windowBorderTop;
+		var distBottom = kha_System.windowHeight() - this.windowBorderBottom - (this.comboSelectedY + comboH);
+		var unrollUp = distBottom < 0 && distBottom < distTop;
+		this.beginRegion(this.globalG,this.comboSelectedX,this.comboSelectedY,this.comboSelectedW);
+		if(this.isKeyPressed || this.inputWheelDelta != 0) {
+			var arrowUp = this.isKeyPressed && this.key == (unrollUp ? 40 : 38);
+			var arrowDown = this.isKeyPressed && this.key == (unrollUp ? 38 : 40);
+			var wheelUp = unrollUp && this.inputWheelDelta > 0 || !unrollUp && this.inputWheelDelta < 0;
+			var wheelDown = unrollUp && this.inputWheelDelta < 0 || !unrollUp && this.inputWheelDelta > 0;
+			if((arrowUp || wheelUp) && this.comboToSubmit > 0) {
+				var step = 1;
+				if(this.comboSearchBar && this.textSelected.length > 0) {
+					var search = this.textSelected.toLowerCase();
+					while(this.comboSelectedTexts[this.comboToSubmit - step].toLowerCase().indexOf(search) < 0 && this.comboToSubmit - step > 0) ++step;
+					if(this.comboSelectedTexts[this.comboToSubmit - step].toLowerCase().indexOf(search) < 0) {
+						step = 0;
+					}
+				}
+				this.comboToSubmit -= step;
+				this.submitComboHandle = this.comboSelectedHandle;
+			} else if((arrowDown || wheelDown) && this.comboToSubmit < this.comboSelectedTexts.length - 1) {
+				var step = 1;
+				if(this.comboSearchBar && this.textSelected.length > 0) {
+					var search = this.textSelected.toLowerCase();
+					while(this.comboSelectedTexts[this.comboToSubmit + step].toLowerCase().indexOf(search) < 0 && this.comboToSubmit + step < this.comboSelectedTexts.length - 1) ++step;
+					if(this.comboSelectedTexts[this.comboToSubmit + step].toLowerCase().indexOf(search) < 0) {
+						step = 0;
+					}
+				}
+				this.comboToSubmit += step;
+				this.submitComboHandle = this.comboSelectedHandle;
+			}
+			if(this.comboSelectedWindow != null) {
+				this.comboSelectedWindow.redraws = 2;
+			}
+		}
+		this.inputEnabled = true;
+		var _BUTTON_COL = this.t.BUTTON_COL;
+		var _ELEMENT_OFFSET = this.t.ELEMENT_OFFSET;
+		this.t.ELEMENT_OFFSET = 0;
+		var unrollRight = this._x + this.comboSelectedW * 2 < kha_System.windowWidth() - this.windowBorderRight ? 1 : -1;
+		var resetPosition = false;
+		var search = "";
+		if(this.comboSearchBar) {
+			if(unrollUp) {
+				this._y -= this.t.ELEMENT_H * this.ops.scaleFactor * 2;
+			}
+			var comboSearchHandle = zui_Handle.global.nest(0,null);
+			if(zui_Zui.comboFirst) {
+				comboSearchHandle.text = "";
+			}
+			this.fill(0,0,this._w / this.ops.scaleFactor,this.t.ELEMENT_H * this.ops.scaleFactor / this.ops.scaleFactor,this.t.SEPARATOR_COL);
+			search = this.textInput(comboSearchHandle,"",0,true,true).toLowerCase();
+			if(this.isReleased) {
+				zui_Zui.comboFirst = true;
+			}
+			if(zui_Zui.comboFirst) {
+				this.startTextEdit(comboSearchHandle);
+			}
+			resetPosition = comboSearchHandle.changed;
+		}
+		var _g1 = 0;
+		var _g2 = this.comboSelectedTexts.length;
+		while(_g1 < _g2) {
+			var i = _g1++;
+			if(search.length > 0 && this.comboSelectedTexts[i].toLowerCase().indexOf(search) < 0) {
+				continue;
+			}
+			if(resetPosition) {
+				this.comboToSubmit = this.comboSelectedHandle.position = i;
+				this.submitComboHandle = this.comboSelectedHandle;
+				resetPosition = false;
+			}
+			if(unrollUp) {
+				this._y -= this.t.ELEMENT_H * this.ops.scaleFactor * 2;
+			}
+			this.t.BUTTON_COL = i == this.comboSelectedHandle.position ? this.t.ACCENT_SELECT_COL : this.t.SEPARATOR_COL;
+			this.fill(0,0,this._w / this.ops.scaleFactor,this.t.ELEMENT_H * this.ops.scaleFactor / this.ops.scaleFactor,this.t.SEPARATOR_COL);
+			if(this.button(this.comboSelectedTexts[i],this.comboSelectedAlign)) {
+				this.comboToSubmit = i;
+				this.submitComboHandle = this.comboSelectedHandle;
+				if(this.comboSelectedWindow != null) {
+					this.comboSelectedWindow.redraws = 2;
+				}
+				break;
+			}
+			if(this._y + this.t.ELEMENT_H * this.ops.scaleFactor > kha_System.windowHeight() - this.windowBorderBottom || this._y - this.t.ELEMENT_H * this.ops.scaleFactor * 2 < this.windowBorderTop) {
+				this._x += this.comboSelectedW * unrollRight;
+				this._y = this.comboSelectedY;
+			}
+		}
+		this.t.BUTTON_COL = _BUTTON_COL;
+		this.t.ELEMENT_OFFSET = _ELEMENT_OFFSET;
+		if(this.comboSelectedLabel != "") {
+			if(unrollUp) {
+				this._y -= this.t.ELEMENT_H * this.ops.scaleFactor * 2;
+				this.fill(0,0,this._w / this.ops.scaleFactor,this.t.ELEMENT_H * this.ops.scaleFactor / this.ops.scaleFactor,this.t.SEPARATOR_COL);
+				this.g.set_color(this.t.LABEL_COL);
+				this.drawString(this.g,this.comboSelectedLabel,null,0,2);
+				this._y += this.t.ELEMENT_H * this.ops.scaleFactor;
+				this.fill(0,0,this._w / this.ops.scaleFactor,this.ops.scaleFactor,this.t.ACCENT_SELECT_COL);
+			} else {
+				this.fill(0,0,this._w / this.ops.scaleFactor,this.t.ELEMENT_H * this.ops.scaleFactor / this.ops.scaleFactor,this.t.SEPARATOR_COL);
+				this.fill(0,0,this._w / this.ops.scaleFactor,this.ops.scaleFactor,this.t.ACCENT_SELECT_COL);
+				this.g.set_color(this.t.LABEL_COL);
+				this.drawString(this.g,this.comboSelectedLabel,null,0,2);
+			}
+		}
+		if((this.inputReleased || this.inputReleasedR || this.isEscapeDown || this.isReturnDown) && !zui_Zui.comboFirst) {
+			this.comboSelectedHandle = null;
+			zui_Zui.comboFirst = true;
+		} else {
+			zui_Zui.comboFirst = false;
+		}
+		this.inputEnabled = this.comboSelectedHandle == null;
+		this.endRegion(false);
+		this.globalG.end();
+		this.g = _g;
+	}
+	,drawTooltip: function(bindGlobalG) {
+		if(this.sliderTooltip) {
+			if(bindGlobalG) {
+				this.globalG.begin(false);
+			}
+			this.globalG.set_font(this.ops.font);
+			this.globalG.set_fontSize(this.fontSize * 2);
+			var text = Math.round(this.scrollHandle.value * 100) / 100 + "";
+			var xoff = this.ops.font.width(this.globalG.get_fontSize(),text) / 2;
+			var yoff = this.ops.font.height(this.globalG.get_fontSize());
+			var x = Math.min(Math.max(this.sliderTooltipX,this.inputX),this.sliderTooltipX + this.sliderTooltipW);
+			this.globalG.set_color(this.t.ACCENT_COL);
+			this.globalG.fillRect(x - xoff,this.sliderTooltipY - yoff,xoff * 2,yoff);
+			this.globalG.set_color(this.t.TEXT_COL);
+			this.globalG.drawString(text,x - xoff,this.sliderTooltipY - yoff);
+			if(bindGlobalG) {
+				this.globalG.end();
+			}
+		}
+		if(zui_Zui.touchTooltip && this.textSelectedHandle != null) {
+			if(bindGlobalG) {
+				this.globalG.begin(false);
+			}
+			this.globalG.set_font(this.ops.font);
+			this.globalG.set_fontSize(this.fontSize * 2);
+			var xoff = this.ops.font.width(this.globalG.get_fontSize(),this.textSelected) / 2;
+			var yoff = this.ops.font.height(this.globalG.get_fontSize()) / 2;
+			var x = kha_System.windowWidth() / 2;
+			var y = kha_System.windowHeight() / 3;
+			this.globalG.set_color(this.t.ACCENT_COL);
+			this.globalG.fillRect(x - xoff,y - yoff,xoff * 2,yoff * 2);
+			this.globalG.set_color(this.t.TEXT_COL);
+			this.globalG.drawString(this.textSelected,x - xoff,y - yoff);
+			if(bindGlobalG) {
+				this.globalG.end();
+			}
+		}
+		if(this.tooltipText != "" || this.tooltipImg != null) {
+			if(this.inputChanged()) {
+				this.tooltipShown = false;
+				this.tooltipWait = this.inputDX == 0 && this.inputDY == 0;
+			}
+			if(!this.tooltipShown) {
+				this.tooltipShown = true;
+				this.tooltipX = this.inputX;
+				this.tooltipTime = kha_Scheduler.time();
+			}
+			if(!this.tooltipWait && kha_Scheduler.time() - this.tooltipTime > 1.0) {
+				if(this.tooltipImg != null) {
+					this.drawTooltipImage(bindGlobalG);
+				}
+				if(this.tooltipText != "") {
+					this.drawTooltipText(bindGlobalG);
+				}
+			}
+		} else {
+			this.tooltipShown = false;
+		}
+	}
+	,drawTooltipText: function(bindGlobalG) {
+		this.globalG.set_color(this.t.TEXT_COL);
+		var lines = this.tooltipText.split("\n");
+		var tooltipW = 0.0;
+		var _g = 0;
+		while(_g < lines.length) {
+			var line = lines[_g];
+			++_g;
+			var lineTooltipW = this.ops.font.width(this.fontSize,line);
+			if(lineTooltipW > tooltipW) {
+				tooltipW = lineTooltipW;
+			}
+		}
+		this.tooltipX = Math.min(this.tooltipX,kha_System.windowWidth() - tooltipW - 20);
+		if(bindGlobalG) {
+			this.globalG.begin(false);
+		}
+		var fontHeight = this.ops.font.height(this.fontSize);
+		var off = 0;
+		if(this.tooltipImg != null) {
+			var w = this.tooltipImg.get_width();
+			if(this.tooltipImgMaxWidth != null && w > this.tooltipImgMaxWidth) {
+				w = this.tooltipImgMaxWidth;
+			}
+			off = this.tooltipImg.get_height() * (w / this.tooltipImg.get_width()) | 0;
+		}
+		this.globalG.fillRect(this.tooltipX,this.tooltipY + off,tooltipW + 20,fontHeight * lines.length);
+		this.globalG.set_font(this.ops.font);
+		this.globalG.set_fontSize(this.fontSize);
+		this.globalG.set_color(this.t.ACCENT_COL);
+		var _g = 0;
+		var _g1 = lines.length;
+		while(_g < _g1) {
+			var i = _g++;
+			this.globalG.drawString(lines[i],this.tooltipX + 5,this.tooltipY + off + i * this.fontSize);
+		}
+		if(bindGlobalG) {
+			this.globalG.end();
+		}
+	}
+	,drawTooltipImage: function(bindGlobalG) {
+		var w = this.tooltipImg.get_width();
+		if(this.tooltipImgMaxWidth != null && w > this.tooltipImgMaxWidth) {
+			w = this.tooltipImgMaxWidth;
+		}
+		var h = this.tooltipImg.get_height() * (w / this.tooltipImg.get_width());
+		this.tooltipX = Math.min(this.tooltipX,kha_System.windowWidth() - w - 20);
+		this.tooltipY = Math.min(this.tooltipY,kha_System.windowHeight() - h - 20);
+		if(bindGlobalG) {
+			this.globalG.begin(false);
+		}
+		this.globalG.set_color(-16777216);
+		this.globalG.fillRect(this.tooltipX,this.tooltipY,w,h);
+		this.globalG.set_color(-1);
+		if(this.tooltipInvertY) {
+			this.globalG.drawScaledImage(this.tooltipImg,this.tooltipX,this.tooltipY + h,w,-h);
+		} else {
+			this.globalG.drawScaledImage(this.tooltipImg,this.tooltipX,this.tooltipY,w,h);
+		}
+		if(bindGlobalG) {
+			this.globalG.end();
+		}
+	}
+	,drawString: function(g,text,xOffset,yOffset,align,truncation) {
+		if(truncation == null) {
+			truncation = true;
+		}
+		if(align == null) {
+			align = 0;
+		}
+		if(yOffset == null) {
+			yOffset = 0;
+		}
+		var fullText = text;
+		if(truncation) {
+			while(text.length > 0 && this.ops.font.width(this.fontSize,text) > this._w - 6 * this.ops.scaleFactor) text = HxOverrides.substr(text,0,text.length - 1);
+			if(text.length < fullText.length) {
+				text += "..";
+				while(text.length > 2 && this.ops.font.width(this.fontSize,text) > this._w - 10 * this.ops.scaleFactor) text = HxOverrides.substr(text,0,text.length - 3) + "..";
+				if(this.isHovered) {
+					this.tooltip(fullText);
+				}
+			}
+		}
+		if(zui_Zui.dynamicGlyphLoad) {
+			var _g = 0;
+			var _g1 = text.length;
+			while(_g < _g1) {
+				var i = _g++;
+				if(HxOverrides.cca(text,i) > 126 && kha_graphics2_Graphics.fontGlyphs.indexOf(HxOverrides.cca(text,i)) == -1) {
+					kha_graphics2_Graphics.fontGlyphs.push(HxOverrides.cca(text,i));
+					kha_graphics2_Graphics.fontGlyphs = kha_graphics2_Graphics.fontGlyphs.slice();
+				}
+			}
+		}
+		if(xOffset == null) {
+			xOffset = this.t.TEXT_OFFSET;
+		}
+		xOffset *= this.ops.scaleFactor;
+		g.set_font(this.ops.font);
+		g.set_fontSize(this.fontSize);
+		if(align == 1) {
+			xOffset = this._w / 2 - this.ops.font.width(this.fontSize,text) / 2;
+		} else if(align == 2) {
+			xOffset = this._w - this.ops.font.width(this.fontSize,text) - this.t.TEXT_OFFSET * this.ops.scaleFactor;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		g.set_pipeline(this.rtTextPipeline);
+		if(this.textColoring == null) {
+			g.drawString(text,this._x + xOffset,this._y + this.fontOffsetY + yOffset);
+		} else {
+			var _g = 0;
+			var _g1 = this.textColoring.colorings;
+			while(_g < _g1.length) {
+				var coloring = _g1[_g];
+				++_g;
+				var result = zui_Zui.extractColoring(text,coloring);
+				if(result.colored != "") {
+					g.set_color(coloring.color);
+					g.drawString(result.colored,this._x + xOffset,this._y + this.fontOffsetY + yOffset);
+				}
+				text = result.uncolored;
+			}
+			g.set_color(this.textColoring.default_color);
+			g.drawString(text,this._x + xOffset,this._y + this.fontOffsetY + yOffset);
+		}
+		g.set_pipeline(null);
+	}
+	,endElement: function(elementSize) {
+		if(elementSize == null) {
+			elementSize = this.t.ELEMENT_H * this.ops.scaleFactor + this.t.ELEMENT_OFFSET * this.ops.scaleFactor;
+		}
+		if(this.currentWindow == null || this.currentWindow.layout == 0) {
+			if(this.curRatio == -1 || this.ratios != null && this.curRatio == this.ratios.length - 1) {
+				this._y += elementSize;
+				if(this.ratios != null && this.curRatio == this.ratios.length - 1) {
+					this.curRatio = -1;
+					this.ratios = null;
+					this._x = this.xBeforeSplit;
+					this._w = this.wBeforeSplit;
+					this.highlightFullRow = false;
+				}
+			} else {
+				this.curRatio++;
+				this._x += this._w;
+				var ratio = this.ratios[this.curRatio];
+				this._w = (ratio < 0 ? -ratio : ratio * this.wBeforeSplit) | 0;
+			}
+		} else {
+			this._x += this._w + this.t.ELEMENT_OFFSET * this.ops.scaleFactor;
+		}
+	}
+	,highlightNextRow: function() {
+		this.highlightFullRow = true;
+	}
+	,getRatio: function(ratio,dyn) {
+		if(ratio < 0) {
+			return -ratio;
+		} else {
+			return ratio * dyn;
+		}
+	}
+	,row: function(ratios) {
+		this.ratios = ratios;
+		this.curRatio = 0;
+		this.xBeforeSplit = this._x;
+		this.wBeforeSplit = this._w;
+		var ratio = ratios[this.curRatio];
+		this._w = (ratio < 0 ? -ratio : ratio * this._w) | 0;
+	}
+	,indent: function(bothSides) {
+		if(bothSides == null) {
+			bothSides = true;
+		}
+		this._x += this.t.TAB_W * this.ops.scaleFactor | 0;
+		this._w -= this.t.TAB_W * this.ops.scaleFactor | 0;
+		if(bothSides) {
+			this._w -= this.t.TAB_W * this.ops.scaleFactor | 0;
+		}
+	}
+	,unindent: function(bothSides) {
+		if(bothSides == null) {
+			bothSides = true;
+		}
+		this._x -= this.t.TAB_W * this.ops.scaleFactor | 0;
+		this._w += this.t.TAB_W * this.ops.scaleFactor | 0;
+		if(bothSides) {
+			this._w += this.t.TAB_W * this.ops.scaleFactor | 0;
+		}
+	}
+	,fadeColor: function() {
+		this.g.set_color(kha_Color.fromFloats(((this.g.get_color() & 16711680) >>> 16) * 0.00392156862745098,((this.g.get_color() & 65280) >>> 8) * 0.00392156862745098,(this.g.get_color() & 255) * 0.00392156862745098,0.25));
+	}
+	,fill: function(x,y,w,h,color) {
+		this.g.set_color(color);
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		this.g.fillRect(this._x + x * this.ops.scaleFactor,this._y + y * this.ops.scaleFactor - 1,w * this.ops.scaleFactor,h * this.ops.scaleFactor);
+		this.g.set_color(-1);
+	}
+	,rect: function(x,y,w,h,color,strength) {
+		if(strength == null) {
+			strength = 1.0;
+		}
+		this.g.set_color(color);
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		this.g.drawRect(this._x + x * this.ops.scaleFactor,this._y + y * this.ops.scaleFactor,w * this.ops.scaleFactor,h * this.ops.scaleFactor,strength);
+		this.g.set_color(-1);
+	}
+	,drawRect: function(g,fill,x,y,w,h,strength) {
+		if(strength == null) {
+			strength = 0.0;
+		}
+		if(strength == 0.0) {
+			strength = 1;
+		}
+		if(!this.enabled) {
+			this.fadeColor();
+		}
+		if(fill) {
+			g.fillRect(x,y - 1,w,h + 1);
+		} else {
+			g.drawRect(x,y,w,h,strength);
+		}
+	}
+	,isVisible: function(elemH) {
+		if(this.currentWindow == null) {
+			return true;
+		}
+		if(this._y + elemH > this.windowHeaderH) {
+			return this._y < this.currentWindow.texture.get_height();
+		} else {
+			return false;
+		}
+	}
+	,getReleased: function(elemH) {
+		if(elemH == null) {
+			elemH = -1.0;
+		}
+		this.isReleased = this.enabled && this.inputEnabled && this.inputReleased && this.getHover(elemH) && this.getInitialHover(elemH);
+		return this.isReleased;
+	}
+	,getPushed: function(elemH) {
+		if(elemH == null) {
+			elemH = -1.0;
+		}
+		this.isPushed = this.enabled && this.inputEnabled && this.inputDown && this.getHover(elemH) && this.getInitialHover(elemH);
+		return this.isPushed;
+	}
+	,getStarted: function(elemH) {
+		if(elemH == null) {
+			elemH = -1.0;
+		}
+		this.isStarted = this.enabled && this.inputEnabled && this.inputStarted && this.getHover(elemH);
+		return this.isStarted;
+	}
+	,getInitialHover: function(elemH) {
+		if(elemH == null) {
+			elemH = -1.0;
+		}
+		if(this.scissor && this.inputY < this._windowY + this.windowHeaderH) {
+			return false;
+		}
+		if(elemH == -1.0) {
+			elemH = this.t.ELEMENT_H * this.ops.scaleFactor;
+		}
+		if(this.enabled && this.inputEnabled && this.inputStartedX >= this._windowX + this._x && this.inputStartedX < this._windowX + this._x + this._w && this.inputStartedY >= this._windowY + this._y) {
+			return this.inputStartedY < this._windowY + this._y + elemH;
+		} else {
+			return false;
+		}
+	}
+	,getHover: function(elemH) {
+		if(elemH == null) {
+			elemH = -1.0;
+		}
+		if(this.scissor && this.inputY < this._windowY + this.windowHeaderH) {
+			return false;
+		}
+		if(elemH == -1.0) {
+			elemH = this.t.ELEMENT_H * this.ops.scaleFactor;
+		}
+		this.isHovered = this.enabled && this.inputEnabled && this.inputX >= this._windowX + (this.highlightFullRow ? 0 : this._x) && this.inputX < this._windowX + this._x + (this.highlightFullRow ? this._windowW : this._w) && this.inputY >= this._windowY + this._y && this.inputY < this._windowY + this._y + elemH;
+		return this.isHovered;
+	}
+	,getInputInRect: function(x,y,w,h,scale) {
+		if(scale == null) {
+			scale = 1.0;
+		}
+		if(this.enabled && this.inputEnabled && this.inputX >= x * scale && this.inputX < (x + w) * scale && this.inputY >= y * scale) {
+			return this.inputY < (y + h) * scale;
+		} else {
+			return false;
+		}
+	}
+	,onMouseDown: function(button,x,y) {
+		if(this.penInUse) {
+			return;
+		}
+		if(button == 0) {
+			this.inputStarted = true;
+		} else {
+			this.inputStartedR = true;
+		}
+		if(button == 0) {
+			this.inputDown = true;
+		} else {
+			this.inputDownR = true;
+		}
+		this.inputStartedTime = kha_Scheduler.time();
+		this.inputStartedX = x;
+		this.inputStartedY = y;
+	}
+	,onMouseUp: function(button,x,y) {
+		if(this.penInUse) {
+			return;
+		}
+		if(this.touchHoldActivated) {
+			this.touchHoldActivated = false;
+			return;
+		}
+		if(this.isScrolling) {
+			this.isScrolling = false;
+			this.scrollHandle = null;
+			this.sliderTooltip = false;
+			if(x == this.inputStartedX && y == this.inputStartedY) {
+				if(button == 0) {
+					this.inputReleased = true;
+				} else {
+					this.inputReleasedR = true;
+				}
+			}
+		} else if(button == 0) {
+			this.inputReleased = true;
+		} else {
+			this.inputReleasedR = true;
+		}
+		if(button == 0) {
+			this.inputDown = false;
+		} else {
+			this.inputDownR = false;
+		}
+		this.deselectText();
+	}
+	,onMouseMove: function(x,y,movementX,movementY) {
+		this.setInputPosition(x,y);
+	}
+	,onMouseWheel: function(delta) {
+		this.inputWheelDelta = delta;
+	}
+	,setInputPosition: function(x,y) {
+		this.inputDX += x - this.inputX;
+		this.inputDY += y - this.inputY;
+		this.inputX = x;
+		this.inputY = y;
+	}
+	,onPenDown: function(x,y,pressure) {
+		this.onMouseDown(0,x,y);
+	}
+	,onPenUp: function(x,y,pressure) {
+		if(this.inputStarted) {
+			this.inputStarted = false;
+			this.penInUse = true;
+			return;
+		}
+		this.onMouseUp(0,x,y);
+		this.penInUse = true;
+	}
+	,onPenMove: function(x,y,pressure) {
+		this.onMouseMove(x,y,0,0);
+	}
+	,onKeyDown: function(code) {
+		this.key = code;
+		this.isKeyPressed = true;
+		this.isKeyDown = true;
+		zui_Zui.keyRepeatTime = kha_Scheduler.time() + 0.4;
+		switch(code) {
+		case 8:
+			this.isBackspaceDown = true;
+			break;
+		case 9:
+			this.isTabDown = true;
+			break;
+		case 13:
+			this.isReturnDown = true;
+			break;
+		case 16:
+			this.isShiftDown = true;
+			break;
+		case 17:
+			this.isCtrlDown = true;
+			break;
+		case 18:
+			this.isAltDown = true;
+			break;
+		case 27:
+			this.isEscapeDown = true;
+			break;
+		case 32:
+			this.char = " ";
+			break;
+		case 46:
+			this.isDeleteDown = true;
+			break;
+		case 65:
+			this.isADown = true;
+			break;
+		default:
+		}
+	}
+	,onKeyUp: function(code) {
+		this.isKeyDown = false;
+		switch(code) {
+		case 8:
+			this.isBackspaceDown = false;
+			break;
+		case 9:
+			this.isTabDown = false;
+			break;
+		case 13:
+			this.isReturnDown = false;
+			break;
+		case 16:
+			this.isShiftDown = false;
+			break;
+		case 17:
+			this.isCtrlDown = false;
+			break;
+		case 18:
+			this.isAltDown = false;
+			break;
+		case 27:
+			this.isEscapeDown = false;
+			break;
+		case 46:
+			this.isDeleteDown = false;
+			break;
+		case 65:
+			this.isADown = false;
+			break;
+		default:
+		}
+	}
+	,onKeyPress: function(char) {
+		this.char = char;
+		this.isKeyPressed = true;
+	}
+	,onCut: function() {
+		zui_Zui.isCut = true;
+		return this.onCopy();
+	}
+	,onCopy: function() {
+		zui_Zui.isCopy = true;
+		return zui_Zui.textToCopy;
+	}
+	,onPaste: function(s) {
+		zui_Zui.isPaste = true;
+		zui_Zui.textToPaste = s;
+	}
+	,ELEMENT_W: function() {
+		return this.t.ELEMENT_W * this.ops.scaleFactor;
+	}
+	,ELEMENT_H: function() {
+		return this.t.ELEMENT_H * this.ops.scaleFactor;
+	}
+	,ELEMENT_OFFSET: function() {
+		return this.t.ELEMENT_OFFSET * this.ops.scaleFactor;
+	}
+	,ARROW_SIZE: function() {
+		return this.t.ARROW_SIZE * this.ops.scaleFactor;
+	}
+	,BUTTON_H: function() {
+		return this.t.BUTTON_H * this.ops.scaleFactor;
+	}
+	,CHECK_SIZE: function() {
+		return this.t.CHECK_SIZE * this.ops.scaleFactor;
+	}
+	,CHECK_SELECT_SIZE: function() {
+		return this.t.CHECK_SELECT_SIZE * this.ops.scaleFactor;
+	}
+	,FONT_SIZE: function() {
+		return this.t.FONT_SIZE * this.ops.scaleFactor | 0;
+	}
+	,SCROLL_W: function() {
+		return this.t.SCROLL_W * this.ops.scaleFactor | 0;
+	}
+	,TEXT_OFFSET: function() {
+		return this.t.TEXT_OFFSET * this.ops.scaleFactor;
+	}
+	,TAB_W: function() {
+		return this.t.TAB_W * this.ops.scaleFactor | 0;
+	}
+	,HEADER_DRAG_H: function() {
+		return 15 * this.ops.scaleFactor | 0;
+	}
+	,SCALE: function() {
+		return this.ops.scaleFactor;
+	}
+	,TOOLTIP_DELAY: function() {
+		return 1.0;
+	}
+	,resize: function(handle,w,h) {
+		handle.redraws = 2;
+		if(handle.texture != null) {
+			handle.texture.unload();
+		}
+		if(w < 1) {
+			w = 1;
+		}
+		if(h < 1) {
+			h = 1;
+		}
+		handle.texture = kha_Image.createRenderTarget(w,h,0,0,1);
+		handle.texture.get_g2().set_imageScaleQuality(1);
+	}
+	,__class__: zui_Zui
+};
+var zui_Handle = function(ops) {
+	this.changed = false;
+	this.dragY = 0;
+	this.dragX = 0;
+	this.dragEnabled = false;
+	this.lastMaxY = 0.0;
+	this.lastMaxX = 0.0;
+	this.layout = 0;
+	this.scrollEnabled = false;
+	this.scrollOffset = 0.0;
+	this.redraws = 2;
+	this.texture = null;
+	this.text = "";
+	this.value = 0.0;
+	this.color = -1;
+	this.position = 0;
+	this.selected = false;
+	if(ops != null) {
+		if(ops.selected != null) {
+			this.selected = ops.selected;
+		}
+		if(ops.position != null) {
+			this.position = ops.position;
+		}
+		if(ops.value != null) {
+			this.value = ops.value;
+		}
+		if(ops.text != null) {
+			this.text = ops.text;
+		}
+		if(ops.color != null) {
+			this.color = ops.color;
+		}
+		if(ops.layout != null) {
+			this.layout = ops.layout;
+		}
+	}
+};
+$hxClasses["zui.Handle"] = zui_Handle;
+zui_Handle.__name__ = true;
+zui_Handle.prototype = {
+	selected: null
+	,position: null
+	,color: null
+	,value: null
+	,text: null
+	,texture: null
+	,redraws: null
+	,scrollOffset: null
+	,scrollEnabled: null
+	,layout: null
+	,lastMaxX: null
+	,lastMaxY: null
+	,dragEnabled: null
+	,dragX: null
+	,dragY: null
+	,changed: null
+	,children: null
+	,nest: function(i,ops) {
+		if(this.children == null) {
+			this.children = new haxe_ds_IntMap();
+		}
+		var c = this.children.h[i];
+		if(c == null) {
+			c = new zui_Handle(ops);
+			this.children.h[i] = c;
+		}
+		return c;
+	}
+	,unnest: function(i) {
+		if(this.children != null) {
+			this.children.remove(i);
+		}
+	}
+	,__class__: zui_Handle
+};
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
@@ -31996,6 +34567,23 @@ kha_netsync_Session.RPC_SERVER = 0;
 kha_netsync_Session.RPC_ALL = 1;
 kha_netsync_SyncBuilder.nextId = 0;
 kha_netsync_SyncBuilder.objects = [];
+zui_Id.i = 0;
+zui_Themes.dark = { NAME : "Default Dark", WINDOW_BG_COL : -14079703, WINDOW_TINT_COL : -1, ACCENT_COL : -13027015, ACCENT_HOVER_COL : -12369085, ACCENT_SELECT_COL : -11513776, BUTTON_COL : -13092808, BUTTON_TEXT_COL : -1513499, BUTTON_HOVER_COL : -11974327, BUTTON_PRESSED_COL : -15000805, TEXT_COL : -1513499, LABEL_COL : -3618616, SEPARATOR_COL : -14671840, HIGHLIGHT_COL : -14656100, CONTEXT_COL : -14540254, PANEL_BG_COL : -12895429, FONT_SIZE : 13, ELEMENT_W : 100, ELEMENT_H : 24, ELEMENT_OFFSET : 4, ARROW_SIZE : 5, BUTTON_H : 22, CHECK_SIZE : 15, CHECK_SELECT_SIZE : 8, SCROLL_W : 9, TEXT_OFFSET : 8, TAB_W : 6, FILL_WINDOW_BG : false, FILL_BUTTON_BG : true, FILL_ACCENT_BG : false, LINK_STYLE : 0, FULL_TABS : false};
+zui_Zui.alwaysRedrawWindow = true;
+zui_Zui.keyRepeat = true;
+zui_Zui.dynamicGlyphLoad = true;
+zui_Zui.touchScroll = false;
+zui_Zui.touchHold = false;
+zui_Zui.touchTooltip = false;
+zui_Zui.keyRepeatTime = 0.0;
+zui_Zui.textToPaste = "";
+zui_Zui.textToCopy = "";
+zui_Zui.isCut = false;
+zui_Zui.isCopy = false;
+zui_Zui.isPaste = false;
+zui_Zui.copyFrame = 0;
+zui_Zui.comboFirst = true;
+zui_Handle.global = new zui_Handle();
 Main.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 

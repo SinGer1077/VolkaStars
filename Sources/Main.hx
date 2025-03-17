@@ -9,6 +9,7 @@ import kha.Scheduler;
 import kha.System;
 
 import Star;
+import FPSCount;
 
 class Main {
 	static var logo = ["1 1 1 1 111", "11  111 111", "1 1 1 1 1 1"];
@@ -56,10 +57,12 @@ class Main {
 				//var empty = new Empty();
 				Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
 				//System.notifyOnFrames(function (frames) { empty.render;});
-				for (i in 0...100){
-					var star = new Star(1.5, new Vector2(0., 0.,));
-					System.notifyOnFrames(star.render);
-				}
+				//for (i in 0...100){
+				//	var star = new Star(1.5, new Vector2(0., 0.,));
+				//	System.notifyOnFrames(star.render);
+				//}
+				var fps = new FPSCounter();
+				//System.notifyOnFrames(fps.render);
 				//System.notifyOnFrames(function (frames) { star.render;});
 			});
 		});
