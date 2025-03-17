@@ -60,7 +60,7 @@ vec3 galaxy(vec2 uv) {
 	float r; 
 	r = rho/1.0; 
     float dens = exp(-r*r);
-	r = rho/.25;	  
+	r = rho/0.25; 	  
     float bulb = exp(-r*r);
 	float phase = 5.*(ang-shear);	
 	
@@ -128,7 +128,15 @@ void main(){
     vec3 col = vec3(1., 0., 0.);
     
     //uv *= sin(iTime);
-    col = galaxy(uv);
-    col *= stars(uv, uvScale);
+    vec3 galaxyTemp = galaxy(uv * 0.1/uvScale) * 1./(uvScale * 3.0);
+    vec3 starSky = stars(uv, 100 * (1./(uvScale * 5.)));
+    galaxyTemp *= (starSky + 1.5);
+    //col = mix(galaxyTemp, sta), uvScale/0.1 - 1);
+    
+    //col *= stars(uv, uvScale * 10.);
+    //vec3 brightGalaxy = mix(galaxyTemp, stars(uv, 50.), 0.5);
+    //col = mix(brightGalaxy, stars(uv, 11.-uvScale), uvScale / 10.);
+    col = galaxyTemp;
+    col *= vec3(2.0, 1.0, 0.5); 
     fragColor = vec4(col,1.0);
 }

@@ -10,6 +10,7 @@ import kha.System;
 
 import GlobalState;
 import MouseData;
+import KeyboardData;
 import Star;
 import FPSCount;
 
@@ -83,6 +84,7 @@ class Main {
 				//for (i in 0...100){
 				var GlobalState = new GlobalState();
 				var MouseData = new MouseData();
+				var KeyboardData = new KeyboardData();
 					fps = new FPSCounter();
 					star = new Star(1.5, new Vector2(0., 0.,));
 					//System.notifyOnFrames(star.render);

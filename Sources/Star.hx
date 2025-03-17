@@ -35,16 +35,22 @@ class Star{
     static var vertices:Array<Float>;
     static var indices:Array<Int>;
 
+    var size:Float;
+    var position:Vector2;
+
     public function new(size:Float, position:Vector2) {
         Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
         structure = new VertexStructure();
         structure.add("pos", VertexData.Float32_2X);    
         structure.add("uvData", VertexData.Float32_3X);       
         fillBuffers(32, size, position, structure);
+        this.size = size;
+        this.position = position;
     }
 
     public function update(){
         trace(GlobalState.mouseWheel);
+        fillBuffers(32, size, position, structure);
     }
 
     function fillBuffers(segments:Int, size:Float, position:Vector2, structure: VertexStructure) {
@@ -64,7 +70,7 @@ class Star{
 
         vertexData[2] = 0.;
         vertexData[3] = 0.;
-        vertexData[4] = 0.3;
+        vertexData[4] = GlobalState.mouseWheel;
 
 
         for (i in 0...segments) {
@@ -79,7 +85,7 @@ class Star{
             
             vertexData[index + 2] = 0.;
             vertexData[index + 3] = 0.;
-            vertexData[index + 4] = 0.3;
+            vertexData[index + 4] = GlobalState.mouseWheel;
 
             indexData[i * 3] = 0;
             indexData[i * 3 + 1] = i + 1;

@@ -21,6 +21,12 @@ class MouseData{
     }
 
     function onMouseWheel(delta:Float){
-        GlobalState.mouseWheel = delta;
+        var mouseWheel = GlobalState.mouseWheel + delta;
+        if (mouseWheel <= 1)
+            mouseWheel = 1;        
+        if (mouseWheel >= 10)
+            mouseWheel = 10;
+        
+        GlobalState.mouseWheel = mouseWheel;
     }   
 }
