@@ -34,23 +34,37 @@ EReg.prototype = {
 	,__class__: EReg
 };
 var FPSCounter = function() {
+	this.deltaTime = 0.016666666666666666;
 	kha_Assets.loadEverything($bind(this,this.loadingFinished));
 };
 $hxClasses["FPSCounter"] = FPSCounter;
 FPSCounter.__name__ = true;
 FPSCounter.prototype = {
 	ui: null
+	,deltaTime: null
+	,lastTime: null
 	,loadingFinished: function() {
-		this.ui = new zui_Zui({ font : kha_Assets.fonts.DroidSans});
+		var _gthis = this;
+		this.ui = new zui_Zui({ font : kha_Assets.fonts.DroidSans, theme : FPSCounter.fpsTheme});
+		kha_Scheduler.addTimeTask(function() {
+			_gthis.update();
+		},0,0.016666666666666666);
 		kha_System.notifyOnFrames($bind(this,this.render));
+	}
+	,update: function() {
+		var currentTime = kha_Scheduler.time();
+		var frameTime = currentTime - this.lastTime;
+		this.lastTime = currentTime;
+		this.deltaTime += (frameTime - this.deltaTime) * 0.1;
 	}
 	,render: function(framebuffers) {
 		var g = framebuffers[0].get_g2();
 		g.begin();
+		var fps = 1.0 / this.deltaTime;
 		g.end();
 		this.ui.begin(g);
 		if(this.ui.window(zui_Handle.global.nest(1,null),10,10,240,600,true)) {
-			this.ui.text("Text",0);
+			this.ui.text("FPS: " + Math.ceil(fps),0);
 		}
 		this.ui.end();
 	}
@@ -34275,6 +34289,7 @@ js_Boot.__toStr = ({ }).toString;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl;
 }
+FPSCounter.fpsTheme = { NAME : "Default Green", WINDOW_BG_COL : -14079703, WINDOW_TINT_COL : -1, ACCENT_COL : -13027015, ACCENT_HOVER_COL : -12369085, ACCENT_SELECT_COL : -11513776, BUTTON_COL : -13092808, BUTTON_TEXT_COL : -1513499, BUTTON_HOVER_COL : -11974327, BUTTON_PRESSED_COL : -15000805, TEXT_COL : -16711936, LABEL_COL : -3618616, SEPARATOR_COL : -14671840, HIGHLIGHT_COL : -14656100, CONTEXT_COL : -14540254, PANEL_BG_COL : -12895429, FONT_SIZE : 24, ELEMENT_W : 100, ELEMENT_H : 24, ELEMENT_OFFSET : 4, ARROW_SIZE : 5, BUTTON_H : 22, CHECK_SIZE : 15, CHECK_SELECT_SIZE : 8, SCROLL_W : 9, TEXT_OFFSET : 8, TAB_W : 6, FILL_WINDOW_BG : false, FILL_BUTTON_BG : true, FILL_ACCENT_BG : false, LINK_STYLE : 0, FULL_TABS : false};
 Main.logo = ["1 1 1 1 111","11  111 111","1 1 1 1 1 1"];
 haxe_Unserializer.DEFAULT_RESOLVER = new haxe__$Unserializer_DefaultResolver();
 haxe_Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
