@@ -1,3 +1,4 @@
+import kha.math.Vector4;
 import kha.math.Vector2;
 
 
@@ -9,11 +10,15 @@ class GlobalState {
     public static var lastMouseOffset :Vector2;
     public static var mouseDown:Bool; 
 
+    public static var starsTypes:Vector4;
+
     public function new(resolution:Vector2){
         windowResolution = resolution;
 
         mouseWheel = 1.0;
         mousePosition = new Vector2();
+
+        starsTypes = new Vector4();
     }
 
     public static function clamp(value:Float, min:Float, max:Float): Float {        

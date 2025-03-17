@@ -3,6 +3,7 @@
 in vec2 fragCoord;
 in float uvScale;
 in vec2 uvPosition;
+in vec4 sTypes;
 
 out vec4 fragColor;
 
@@ -87,6 +88,20 @@ float littleStar(float m_dist, float fbmCoef) {
     return m_dist;
 }
 
+vec3 getColor(float star){
+    vec3 color = vec3(0.);
+    if (star > 0. && star < 1.)
+        color = vec3(2.0, 1.0, 0.5) * sTypes.x;
+    if (star > 1. && star < 2.)
+        color = vec3(2.0, 2.0, 0.5) * sTypes.y;
+    if (star > 2. && star < 3.)
+        color = vec3(0.25, 0.25, 2.0) * sTypes.z;
+    if (star > 3. && star < 4.)
+        color = vec3(1.0, 1.0, 1.0) * sTypes.w;
+
+    return color;
+}
+
 vec3 stars(vec2 uv, float coef) {
     vec3 sky = vec3(0.);  
     
@@ -118,6 +133,8 @@ vec3 stars(vec2 uv, float coef) {
     float fbmCoef = 0.0;    
     m_dist = littleStar(m_dist, fbmCoef);       
     sky += m_dist;
+    //float colorNoise = noise(neighbor - f_st);
+    sky *= getColor(1.0 / m_dist);
     return sky;
 }
 
@@ -141,6 +158,6 @@ void main(){
         col = starSky;
     else
         col = galaxyTemp * starSky;
-    col *= vec3(2.0, 1.0, 0.5); 
+    //col *= vec3(sTypes.x, sTypes.y, sTypes.z); 
     fragColor = vec4(col,1.0);
 }

@@ -13,9 +13,11 @@ import MouseData;
 import KeyboardData;
 import Star;
 import FPSCount;
+import StarsTypes;
 
 class Main {
 	static var logo = ["1 1 1 1 111", "11  111 111", "1 1 1 1 1 1"];
+	static var starsTypes:StarsTypes;
 	static var fps:FPSCounter;
 	static var star:Star;
 
@@ -68,7 +70,7 @@ class Main {
 		g2.end();
 
 		fps.draw(g2);	
-		
+		starsTypes.draw(g2);
 	}
 
 	public static function main() {
@@ -85,8 +87,9 @@ class Main {
 				var globalState = new GlobalState(new Vector2(1024., 768));
 				var MouseData = new MouseData();
 				var KeyboardData = new KeyboardData();
-					fps = new FPSCounter();
-					star = new Star(1.5, new Vector2(0., 0.,));
+				fps = new FPSCounter();
+				star = new Star(1.5, new Vector2(0., 0.,));
+				starsTypes = new StarsTypes();
 					//System.notifyOnFrames(star.render);
 				//}
 				

@@ -5,6 +5,8 @@ varying vec2 fragCoord;
 varying float uvScale;
 attribute vec3 uvData;
 varying vec2 uvPosition;
+varying vec4 sTypes;
+attribute vec4 starsTypes;
 
 void main()
 {
@@ -12,5 +14,6 @@ void main()
     fragCoord = gl_Position.xy;
     uvScale = uvData.z;
     uvPosition = uvData.xy;
+    sTypes = starsTypes;
 }
 

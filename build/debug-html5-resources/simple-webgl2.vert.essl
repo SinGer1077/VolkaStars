@@ -5,6 +5,8 @@ out vec2 fragCoord;
 out float uvScale;
 layout(location = 1) in vec3 uvData;
 out vec2 uvPosition;
+out vec4 sTypes;
+layout(location = 2) in vec4 starsTypes;
 
 void main()
 {
@@ -12,5 +14,6 @@ void main()
     fragCoord = gl_Position.xy;
     uvScale = uvData.z;
     uvPosition = uvData.xy;
+    sTypes = starsTypes;
 }
 

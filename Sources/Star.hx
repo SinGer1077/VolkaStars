@@ -42,7 +42,8 @@ class Star{
         Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
         structure = new VertexStructure();
         structure.add("pos", VertexData.Float32_2X);    
-        structure.add("uvData", VertexData.Float32_3X);       
+        structure.add("uvData", VertexData.Float32_3X);   
+        structure.add("starsTypes", VertexData.Float32_4X);         
         fillBuffers(32, size, position, structure);
         this.size = size;
         this.position = position;
@@ -71,6 +72,12 @@ class Star{
         vertexData[3] = GlobalState.mousePosition.y;
         vertexData[4] = GlobalState.mouseWheel;
 
+        vertexData[5] = GlobalState.starsTypes.x;
+        vertexData[6] = GlobalState.starsTypes.y;
+        vertexData[7] = GlobalState.starsTypes.z;
+        vertexData[8] = GlobalState.starsTypes.w;
+
+
 
         for (i in 0...segments) {
             var angle = i * angleStep;
@@ -78,13 +85,19 @@ class Star{
             var x = Math.cos(angle) * size + position.x;
             var y = Math.sin(angle) * size + position.y;
 
-            var index = (i + 1) * 5;
+            var index = (i + 1) * 9;
             vertexData[index] = x;
             vertexData[index + 1] = y;
             
             vertexData[index + 2] = GlobalState.mousePosition.x;
             vertexData[index + 3] = GlobalState.mousePosition.y;
             vertexData[index + 4] = GlobalState.mouseWheel;
+
+            vertexData[index + 5] = GlobalState.starsTypes.x;
+            vertexData[index + 6] = GlobalState.starsTypes.y;
+            vertexData[index + 7] = GlobalState.starsTypes.z;
+            vertexData[index + 8] = GlobalState.starsTypes.w;
+
 
             indexData[i * 3] = 0;
             indexData[i * 3 + 1] = i + 1;

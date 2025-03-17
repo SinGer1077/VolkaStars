@@ -46,6 +46,10 @@
 			"type": "shader",
 			"inputs": [
 				{
+					"name": "sTypes",
+					"type": "vec4"
+				},
+				{
 					"name": "fragCoord",
 					"type": "vec2"
 				},
@@ -535,6 +539,10 @@
 					"type": "vec3"
 				},
 				{
+					"name": "starsTypes",
+					"type": "vec4"
+				},
+				{
 					"name": "gl_VertexID",
 					"type": "int"
 				},
@@ -555,6 +563,10 @@
 				{
 					"name": "uvPosition",
 					"type": "vec2"
+				},
+				{
+					"name": "sTypes",
+					"type": "vec4"
 				}
 			],
 			"uniforms": [],
