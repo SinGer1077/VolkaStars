@@ -8,6 +8,8 @@ import kha.Framebuffer;
 import kha.Scheduler;
 import kha.System;
 
+import GlobalState;
+import MouseData;
 import Star;
 import FPSCount;
 
@@ -79,6 +81,8 @@ class Main {
 				Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
 				System.notifyOnFrames(function (frames) { render(frames);});
 				//for (i in 0...100){
+				var GlobalState = new GlobalState();
+				var MouseData = new MouseData();
 					fps = new FPSCounter();
 					star = new Star(1.5, new Vector2(0., 0.,));
 					//System.notifyOnFrames(star.render);

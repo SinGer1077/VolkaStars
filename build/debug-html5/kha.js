@@ -71,6 +71,14 @@ FPSCounter.prototype = {
 	}
 	,__class__: FPSCounter
 };
+var GlobalState = function() {
+	GlobalState.mouseWheel = 0.0;
+};
+$hxClasses["GlobalState"] = GlobalState;
+GlobalState.__name__ = true;
+GlobalState.prototype = {
+	__class__: GlobalState
+};
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
 HxOverrides.__name__ = true;
@@ -187,12 +195,27 @@ Main.main = function() {
 			kha_System.notifyOnFrames(function(frames) {
 				Main.render(frames);
 			});
+			var GlobalState1 = new GlobalState();
+			var MouseData1 = new MouseData();
 			Main.fps = new FPSCounter();
 			Main.star = new Star(1.5,new kha_math_Vector2(0.,0.));
 		});
 	});
 };
 Math.__name__ = true;
+var MouseData = function() {
+	kha_input_Mouse.get().notify(null,null,$bind(this,this.onMouseMove),$bind(this,this.onMouseWheel));
+};
+$hxClasses["MouseData"] = MouseData;
+MouseData.__name__ = true;
+MouseData.prototype = {
+	onMouseMove: function(x,y,movementX,movementY) {
+	}
+	,onMouseWheel: function(delta) {
+		GlobalState.mouseWheel = delta;
+	}
+	,__class__: MouseData
+};
 var Reflect = function() { };
 $hxClasses["Reflect"] = Reflect;
 Reflect.__name__ = true;
@@ -230,6 +253,10 @@ Reflect.isFunction = function(f) {
 	}
 };
 var Star = function(size,position) {
+	var _gthis = this;
+	kha_Scheduler.addTimeTask(function() {
+		_gthis.update();
+	},0,0.016666666666666666);
 	Star.structure = new kha_graphics4_VertexStructure();
 	Star.structure.add("pos",1);
 	Star.structure.add("uvData",2);
@@ -238,7 +265,10 @@ var Star = function(size,position) {
 $hxClasses["Star"] = Star;
 Star.__name__ = true;
 Star.prototype = {
-	fillBuffers: function(segments,size,position,structure) {
+	update: function() {
+		haxe_Log.trace(GlobalState.mouseWheel,{ fileName : "Star.hx", lineNumber : 47, className : "Star", methodName : "update"});
+	}
+	,fillBuffers: function(segments,size,position,structure) {
 		var angleStep = 2 * Math.PI / segments;
 		var vertexCount = segments + 1;
 		var indicesCount = segments * 3;

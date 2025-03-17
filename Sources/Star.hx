@@ -36,10 +36,15 @@ class Star{
     static var indices:Array<Int>;
 
     public function new(size:Float, position:Vector2) {
+        Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
         structure = new VertexStructure();
         structure.add("pos", VertexData.Float32_2X);    
         structure.add("uvData", VertexData.Float32_3X);       
         fillBuffers(32, size, position, structure);
+    }
+
+    public function update(){
+        trace(GlobalState.mouseWheel);
     }
 
     function fillBuffers(segments:Int, size:Float, position:Vector2, structure: VertexStructure) {
@@ -93,6 +98,8 @@ class Star{
 		pipeline.depthStencilAttachment = kha.graphics4.DepthStencilFormat.Depth16;
 		pipeline.compile();
     }
+
+
 
     public function draw(g4: Graphics): Void {
 		//final fb = frames[0];
