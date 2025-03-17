@@ -41,6 +41,7 @@ $hxClasses["FPSCounter"] = FPSCounter;
 FPSCounter.__name__ = true;
 FPSCounter.prototype = {
 	ui: null
+	,loaded: null
 	,deltaTime: null
 	,lastTime: null
 	,loadingFinished: function() {
@@ -49,7 +50,7 @@ FPSCounter.prototype = {
 		kha_Scheduler.addTimeTask(function() {
 			_gthis.update();
 		},0,0.016666666666666666);
-		kha_System.notifyOnFrames($bind(this,this.render));
+		this.loaded = true;
 	}
 	,update: function() {
 		var currentTime = kha_Scheduler.time();
@@ -57,11 +58,11 @@ FPSCounter.prototype = {
 		this.lastTime = currentTime;
 		this.deltaTime += (frameTime - this.deltaTime) * 0.1;
 	}
-	,render: function(framebuffers) {
-		var g = framebuffers[0].get_g2();
-		g.begin();
+	,draw: function(g) {
+		if(!this.loaded) {
+			return;
+		}
 		var fps = 1.0 / this.deltaTime;
-		g.end();
 		this.ui.begin(g);
 		if(this.ui.window(zui_Handle.global.nest(1,null),10,10,240,600,true)) {
 			this.ui.text("FPS: " + Math.ceil(fps),0);
@@ -142,7 +143,7 @@ $hxClasses["Main"] = Main;
 Main.__name__ = true;
 Main.update = function() {
 };
-Main.render = function(frames) {
+Main.render1 = function(frames) {
 	var fb = frames[0];
 	var g2 = fb.get_g2();
 	g2.begin(true,kha_Color.fromBytes(0,95,106));
@@ -165,13 +166,29 @@ Main.render = function(frames) {
 	g2.popTransformation();
 	g2.end();
 };
+Main.render = function(frames) {
+	var fb = frames[0];
+	var g2 = fb.get_g2();
+	var g4 = fb.get_g4();
+	g4.begin();
+	g4.clear(-16711936,Infinity);
+	Main.star.draw(g4);
+	g4.end();
+	g2.begin(false);
+	g2.end();
+	Main.fps.draw(g2);
+};
 Main.main = function() {
 	kha_System.start(new kha_SystemOptions("Project",1024,768,null,null,null),function(_) {
 		kha_Assets.loadEverything(function() {
 			kha_Scheduler.addTimeTask(function() {
 				Main.update();
 			},0,0.016666666666666666);
-			var fps = new FPSCounter();
+			kha_System.notifyOnFrames(function(frames) {
+				Main.render(frames);
+			});
+			Main.fps = new FPSCounter();
+			Main.star = new Star(1.5,new kha_math_Vector2(0.,0.));
 		});
 	});
 };
@@ -270,16 +287,11 @@ Star.prototype = {
 		Star.pipeline.depthStencilAttachment = 5;
 		Star.pipeline.compile();
 	}
-	,render: function(frames) {
-		var fb = frames[0];
-		var g4 = fb.get_g4();
-		g4.begin();
-		g4.clear(-16711936,Infinity);
+	,draw: function(g4) {
 		g4.setPipeline(Star.pipeline);
 		g4.setVertexBuffer(Star.vBuffer);
 		g4.setIndexBuffer(Star.iBuffer);
 		g4.drawIndexedVertices();
-		g4.end();
 	}
 	,start: function() {
 	}

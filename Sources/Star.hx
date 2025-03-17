@@ -1,5 +1,6 @@
 package;
 
+import kha.graphics4.Graphics;
 import kha.math.Vector3;
 import js.html.TimeElement;
 import haxe.Timer;
@@ -93,12 +94,12 @@ class Star{
 		pipeline.compile();
     }
 
-    public function render(frames: Array<Framebuffer>): Void {
-		final fb = frames[0];
-        final g4 = fb.g4;
+    public function draw(g4: Graphics): Void {
+		//final fb = frames[0];
+        //final g4 = fb.g4;
 
-        g4.begin();       
-        g4.clear(Color.Green, Math.POSITIVE_INFINITY);   
+        //g4.begin();       
+        //g4.clear(Color.Green, Math.POSITIVE_INFINITY);   
 
 		g4.setPipeline(pipeline);
 
@@ -107,7 +108,7 @@ class Star{
 
         g4.drawIndexedVertices();
 
-        g4.end();
+        //g4.end();
 	}   
 
     private function start(): Void{
