@@ -125,18 +125,22 @@ vec3 stars(vec2 uv, float coef) {
 void main(){
     //vec2 uv = (fragCoord.xy * 2. - u_resolution.xy) / u_resolution.y;    
     vec2 uv = fragCoord.xy;
+    uv += uvPosition;
     vec3 col = vec3(1., 0., 0.);
     
     //uv *= sin(iTime);
-    vec3 galaxyTemp = galaxy(uv * 0.1/uvScale) * 1./(uvScale * 3.0);
-    vec3 starSky = stars(uv, 100 * (1./(uvScale * 5.)));
-    galaxyTemp *= (starSky + 1.5);
+    vec3 galaxyTemp = galaxy(uv * 1./uvScale) * 1./(uvScale * uvScale); //первая половина - зум, вторая - фейд
+    vec3 starSky = stars(uv, 200 * 0.1/(uvScale));
+    //galaxyTemp *= (starSky);
     //col = mix(galaxyTemp, sta), uvScale/0.1 - 1);
     
     //col *= stars(uv, uvScale * 10.);
     //vec3 brightGalaxy = mix(galaxyTemp, stars(uv, 50.), 0.5);
     //col = mix(brightGalaxy, stars(uv, 11.-uvScale), uvScale / 10.);
-    col = galaxyTemp;
+    if (uvScale > 5.)
+        col = starSky;
+    else
+        col = galaxyTemp * starSky;
     col *= vec3(2.0, 1.0, 0.5); 
     fragColor = vec4(col,1.0);
 }

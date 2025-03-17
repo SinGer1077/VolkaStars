@@ -14,19 +14,11 @@ class KeyboardData{
 
     function onKeyDown(key:Int) {
         if (key == KeyCode.Q) {
-            GlobalState.mouseWheel = clamp(GlobalState.mouseWheel + 1., 1., 10.);
+            GlobalState.mouseWheel = GlobalState.clamp(GlobalState.mouseWheel + 1., 1., 10.);
         };
         else if (key == KeyCode.E) {
-            GlobalState.mouseWheel = clamp(GlobalState.mouseWheel - 1., 1., 10.);
+            GlobalState.mouseWheel = GlobalState.clamp(GlobalState.mouseWheel - 1., 1., 10.);
         }
 
-    }
-
-    function clamp(value:Float, min:Float, max:Float): Float {        
-        if (value <= min)
-            value = min;        
-        if (value >= max)
-            value = max;
-        return value;
-    }
+    }    
 }

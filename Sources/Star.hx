@@ -49,7 +49,6 @@ class Star{
     }
 
     public function update(){
-        trace(GlobalState.mouseWheel);
         fillBuffers(32, size, position, structure);
     }
 
@@ -68,8 +67,8 @@ class Star{
         vertexData[0] = position.x; 
         vertexData[1] = position.y; 
 
-        vertexData[2] = 0.;
-        vertexData[3] = 0.;
+        vertexData[2] = GlobalState.mousePosition.x;
+        vertexData[3] = GlobalState.mousePosition.y;
         vertexData[4] = GlobalState.mouseWheel;
 
 
@@ -83,8 +82,8 @@ class Star{
             vertexData[index] = x;
             vertexData[index + 1] = y;
             
-            vertexData[index + 2] = 0.;
-            vertexData[index + 3] = 0.;
+            vertexData[index + 2] = GlobalState.mousePosition.x;
+            vertexData[index + 3] = GlobalState.mousePosition.y;
             vertexData[index + 4] = GlobalState.mouseWheel;
 
             indexData[i * 3] = 0;

@@ -82,7 +82,7 @@ class Main {
 				Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
 				System.notifyOnFrames(function (frames) { render(frames);});
 				//for (i in 0...100){
-				var GlobalState = new GlobalState();
+				var globalState = new GlobalState(new Vector2(1024., 768));
 				var MouseData = new MouseData();
 				var KeyboardData = new KeyboardData();
 					fps = new FPSCounter();

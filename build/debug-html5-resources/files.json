@@ -50,12 +50,12 @@
 					"type": "vec2"
 				},
 				{
-					"name": "uvScale",
-					"type": "float"
-				},
-				{
 					"name": "uvPosition",
 					"type": "vec2"
+				},
+				{
+					"name": "uvScale",
+					"type": "float"
 				}
 			],
 			"outputs": [
