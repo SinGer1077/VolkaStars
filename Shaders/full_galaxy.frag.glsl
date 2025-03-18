@@ -84,9 +84,9 @@ float bigStarFBM(vec2 uv, vec2 point){
     return f;
 }
 
-float littleStar(float m_dist, float fbmCoef) {
+float littleStar(float m_dist, float fbmCoef, float density) {
     m_dist += fbmCoef * 0.5;
-    m_dist = 0.01/ m_dist;
+    m_dist = (0.01 * density)/ m_dist;
     m_dist = abs(m_dist); 
     return m_dist;
 }
@@ -112,12 +112,6 @@ vec3 stars(vec2 uv, float coef) {
     vec2 i_st = floor(uv);
     vec2 f_st = fract(uv);  
 
-    //if ( mod(i_st.x + i_st.y, sDeleted) == 0 && sDeleted != 0)
-    //    return vec3(0.);
-    float starNoise = fract(sin(dot(i_st, vec2(12.9898, 78.233))) * 43758.5453);
-    if (starNoise < sDeleted)
-        return vec3(0.0);
-
     float m_dist = 1.;
     vec2 m_point = vec2(0.);
     vec2 m_diff = vec2(0.);
@@ -139,15 +133,23 @@ vec3 stars(vec2 uv, float coef) {
             if (dist < m_dist){
                 m_dist = dist;
                 m_point = point;    
-                m_diff = diff;
+                m_diff = diff;                
             }        
         }
     }
     float fbmCoef = 0.0;      
-    m_dist = littleStar(m_dist, fbmCoef);       
+    float density = 1.0;
+    if (uvScale > 25.)
+        density = clamp(sin(u_time * m_point.y) + cos(u_time) + m_point.x, 1., 2.0);
+    m_dist = littleStar(m_dist, fbmCoef, density);       
     sky += m_dist; 
-    sky *= getColor(m_point.x * m_point.y, m_dist);   
-    return sky;
+    //sky *= getColor(m_point.x * m_point.y, m_dist);   
+
+    float starNoise = fract(sin(dot(i_st, vec2(12.9898, 78.233))) * 43758.5453);
+    if (starNoise < sDeleted)
+        return vec3(0.);   
+    else
+        return sky *= getColor(m_point.x * m_point.y, m_dist);   
 }
 
 
