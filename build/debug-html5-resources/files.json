@@ -50,16 +50,16 @@
 					"type": "vec4"
 				},
 				{
+					"name": "uvScale",
+					"type": "float"
+				},
+				{
 					"name": "fragCoord",
 					"type": "vec2"
 				},
 				{
 					"name": "uvPosition",
 					"type": "vec2"
-				},
-				{
-					"name": "uvScale",
-					"type": "float"
 				}
 			],
 			"outputs": [

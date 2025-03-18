@@ -20,6 +20,12 @@ float random (vec2 uv) {
         51758.54);
 }
 
+float random1 (float uv) {
+    return fract(sin(dot(uv,
+                         12.9898))*
+        51758.54);
+}
+
 float noise (vec2 uv) {
     vec2 i = floor(uv);
     vec2 f = fract(uv);
@@ -66,7 +72,7 @@ vec3 galaxy(vec2 uv) {
 	float phase = 5.*(ang-shear);	
 	
 	float spires = 1.+5.0*0.1*sin(phase);	
-	dens *= .7*spires;
+	dens *= 1.7*spires;
     return vec3(dens);
 }
 
@@ -88,19 +94,21 @@ float littleStar(float m_dist, float fbmCoef) {
     return m_dist;
 }
 
-vec3 getColor(float star){
+vec3 getColor(float star, float m_dist){
     vec3 color = vec3(0.);
-    if (star > 0. && star < 1.)
+    if (star >= 0. && star <= 0.25)
         color = vec3(2.0, 1.0, 0.5) * sTypes.x;
-    if (star > 1. && star < 2.)
+    if (star > 0.25 && star <= 0.5)
         color = vec3(2.0, 2.0, 0.5) * sTypes.y;
-    if (star > 2. && star < 3.)
+    if (star > 0.5 && star <= 0.75)
         color = vec3(0.25, 0.25, 2.0) * sTypes.z;
-    if (star > 3. && star < 4.)
-        color = vec3(1.0, 1.0, 1.0) * sTypes.w;
-
-    return color;
+    if (star > 0.75 && star <= 1.0)
+        color = vec3(1.0, 1.0, 1.0) * sTypes.w;   
+    return color * m_dist * (11.-uvScale);
 }
+
+
+
 
 vec3 stars(vec2 uv, float coef) {
     vec3 sky = vec3(0.);  
@@ -111,53 +119,47 @@ vec3 stars(vec2 uv, float coef) {
     vec2 f_st = fract(uv);    
    
     float m_dist = 1.;
+    vec2 m_point = vec2(0.);
 
     for (int y= -1; y <= 1; y++) {
         for (int x= -1; x <= 1; x++) {
             
             vec2 neighbor = vec2(float(x) ,float(y));  
             
-            vec2 point = random2(i_st + neighbor);           
-
-            vec2 diff = neighbor + point - f_st;           
+            vec2 point = random2(i_st + neighbor);         
+            vec2 diff = neighbor + point - f_st;     
+            //m_point = diff;      
             float dist = 0.;
             if (coef < 5.)
                 dist = length(diff) - bigStarFBM(diff, point) * 0.25 + 0.075;
             else
                 dist = length(diff);
 
-            m_dist = min(m_dist, dist);
+            if (dist < m_dist){
+                m_dist = dist;
+                m_point = point;    
+            }        
         }
     }
-    
     float fbmCoef = 0.0;    
     m_dist = littleStar(m_dist, fbmCoef);       
-    sky += m_dist;
-    //float colorNoise = noise(neighbor - f_st);
-    sky *= getColor(1.0 / m_dist);
+    sky += m_dist; 
+    sky *= getColor(m_point.x * m_point.y, m_dist);   
     return sky;
 }
 
 
-void main(){
-    //vec2 uv = (fragCoord.xy * 2. - u_resolution.xy) / u_resolution.y;    
+void main(){   
     vec2 uv = fragCoord.xy;
     uv += uvPosition;
     vec3 col = vec3(1., 0., 0.);
-    
-    //uv *= sin(iTime);
-    vec3 galaxyTemp = galaxy(uv * 1./uvScale) * 1./(uvScale * uvScale); //первая половина - зум, вторая - фейд
+    float uvScaleCoef = uvScale - 0.5;
+    vec3 galaxyTemp = galaxy(uv * 1./uvScaleCoef) * 1./((uvScale * uvScale) - 0.75); //первая половина - зум, вторая - фейд
     vec3 starSky = stars(uv, 200 * 0.1/(uvScale));
-    //galaxyTemp *= (starSky);
-    //col = mix(galaxyTemp, sta), uvScale/0.1 - 1);
-    
-    //col *= stars(uv, uvScale * 10.);
-    //vec3 brightGalaxy = mix(galaxyTemp, stars(uv, 50.), 0.5);
-    //col = mix(brightGalaxy, stars(uv, 11.-uvScale), uvScale / 10.);
+   
     if (uvScale > 5.)
         col = starSky;
     else
         col = galaxyTemp * starSky;
-    //col *= vec3(sTypes.x, sTypes.y, sTypes.z); 
     fragColor = vec4(col,1.0);
 }

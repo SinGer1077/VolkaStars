@@ -6,9 +6,9 @@ uniform highp float u_time;
 uniform highp vec2 u_resolution;
 
 in highp vec4 sTypes;
+in highp float uvScale;
 in highp vec2 fragCoord;
 in highp vec2 uvPosition;
-in highp float uvScale;
 out highp vec4 fragColor;
 
 highp vec3 galaxy(highp vec2 uv)
@@ -25,7 +25,7 @@ highp vec3 galaxy(highp vec2 uv)
     highp float bulb = exp((-r) * r);
     highp float phase = 5.0 * (ang - shear);
     highp float spires = 1.0 + (0.5 * sin(phase));
-    dens *= (0.699999988079071044921875 * spires);
+    dens *= (1.7000000476837158203125 * spires);
     return vec3(dens);
 }
 
@@ -76,11 +76,11 @@ highp float bigStarFBM(highp vec2 uv, highp vec2 point)
 {
     highp vec2 q = vec2(0.0);
     highp vec2 param = uv + vec2(0.100000001490116119384765625 * u_time);
-    highp float _276 = fbm(param);
-    q.x = _276 + point.x;
+    highp float _277 = fbm(param);
+    q.x = _277 + point.x;
     highp vec2 param_1 = uv + vec2(1.0);
-    highp float _284 = fbm(param_1);
-    q.y = _284 + point.y;
+    highp float _285 = fbm(param_1);
+    q.y = _285 + point.y;
     highp vec2 r = vec2(0.0);
     highp vec2 param_2 = ((uv + (q * 1.0)) + vec2(1.7000000476837158203125, 9.19999980926513671875)) + vec2(0.100000001490116119384765625 * u_time);
     highp float _303 = fbm(param_2);
@@ -102,26 +102,26 @@ highp float littleStar(inout highp float m_dist, highp float fbmCoef)
     return m_dist;
 }
 
-highp vec3 getColor(highp float star)
+highp vec3 getColor(highp float star, highp float m_dist)
 {
     highp vec3 color = vec3(0.0);
-    if ((star > 0.0) && (star < 1.0))
+    if ((star >= 0.0) && (star <= 0.25))
     {
         color = vec3(2.0, 1.0, 0.5) * sTypes.x;
     }
-    if ((star > 1.0) && (star < 2.0))
+    if ((star > 0.25) && (star <= 0.5))
     {
         color = vec3(2.0, 2.0, 0.5) * sTypes.y;
     }
-    if ((star > 2.0) && (star < 3.0))
+    if ((star > 0.5) && (star <= 0.75))
     {
         color = vec3(0.25, 0.25, 2.0) * sTypes.z;
     }
-    if ((star > 3.0) && (star < 4.0))
+    if ((star > 0.75) && (star <= 1.0))
     {
         color = vec3(1.0) * sTypes.w;
     }
-    return color;
+    return (color * m_dist) * (11.0 - uvScale);
 }
 
 highp vec3 stars(inout highp vec2 uv, highp float coef)
@@ -131,6 +131,7 @@ highp vec3 stars(inout highp vec2 uv, highp float coef)
     highp vec2 i_st = floor(uv);
     highp vec2 f_st = fract(uv);
     highp float m_dist = 1.0;
+    highp vec2 m_point = vec2(0.0);
     for (int y = -1; y <= 1; y++)
     {
         for (int x = -1; x <= 1; x++)
@@ -150,17 +151,22 @@ highp vec3 stars(inout highp vec2 uv, highp float coef)
             {
                 dist = length(diff);
             }
-            m_dist = min(m_dist, dist);
+            if (dist < m_dist)
+            {
+                m_dist = dist;
+                m_point = point;
+            }
         }
     }
     highp float fbmCoef = 0.0;
     highp float param_3 = m_dist;
     highp float param_4 = fbmCoef;
-    highp float _476 = littleStar(param_3, param_4);
-    m_dist = _476;
+    highp float _488 = littleStar(param_3, param_4);
+    m_dist = _488;
     sky += vec3(m_dist);
-    highp float param_5 = 1.0 / m_dist;
-    sky *= getColor(param_5);
+    highp float param_5 = m_point.x * m_point.y;
+    highp float param_6 = m_dist;
+    sky *= getColor(param_5, param_6);
     return sky;
 }
 
@@ -169,12 +175,13 @@ void main()
     highp vec2 uv = fragCoord;
     uv += uvPosition;
     highp vec3 col = vec3(1.0, 0.0, 0.0);
-    highp vec2 param = (uv * 1.0) / vec2(uvScale);
-    highp vec3 galaxyTemp = (galaxy(param) * 1.0) / vec3(uvScale * uvScale);
+    highp float uvScaleCoef = uvScale - 0.5;
+    highp vec2 param = (uv * 1.0) / vec2(uvScaleCoef);
+    highp vec3 galaxyTemp = (galaxy(param) * 1.0) / vec3((uvScale * uvScale) - 0.75);
     highp vec2 param_1 = uv;
     highp float param_2 = 20.0 / uvScale;
-    highp vec3 _522 = stars(param_1, param_2);
-    highp vec3 starSky = _522;
+    highp vec3 _542 = stars(param_1, param_2);
+    highp vec3 starSky = _542;
     if (uvScale > 5.0)
     {
         col = starSky;
