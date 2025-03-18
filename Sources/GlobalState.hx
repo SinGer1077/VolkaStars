@@ -17,6 +17,8 @@ class GlobalState {
     public static var initStarCount:Float;
     public static var starsCount:Float;
 
+    public static var seed:Float;
+
     public function new(resolution:Vector2){
         windowResolution = resolution;
 
@@ -29,6 +31,8 @@ class GlobalState {
         starsShouldntDraw = 0.0;
         starsCount = calculateStarsNumber();
         initStarCount = starsCount;
+
+        seed = 200.;
     }
 
     public static function clamp(value:Float, min:Float, max:Float): Float {        
@@ -61,7 +65,10 @@ class GlobalState {
         starsCount = clamp(starsCount + value, 0., 80000.);
 
         var deletedNumber = initStarCount - starsCount;
-        //starsShouldntDraw = Math.ceil(initStarCount / (deletedNumber + 1));
         starsShouldntDraw = deletedNumber / initStarCount;
+    }
+
+    public static function setMouseWheel(value:Float) {
+        mouseWheel = clamp(mouseWheel + value, 1., 30.);
     }
 }

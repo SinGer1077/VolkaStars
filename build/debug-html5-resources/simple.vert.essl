@@ -11,6 +11,10 @@ varying float sDeleted;
 attribute float starsDeletedCount;
 varying float sResolution;
 attribute float starsResolution;
+varying float u_time;
+attribute float timer;
+varying float seed;
+attribute float newSeed;
 
 void main()
 {
@@ -21,5 +25,7 @@ void main()
     sTypes = starsTypes;
     sDeleted = starsDeletedCount;
     sResolution = starsResolution;
+    u_time = timer;
+    seed = newSeed;
 }
 

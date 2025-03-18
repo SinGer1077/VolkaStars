@@ -46,6 +46,8 @@ class Star{
         structure.add("starsTypes", VertexData.Float32_4X);         
         structure.add("starsDeletedCount", VertexData.Float32_1X);
         structure.add("starsResolution", VertexData.Float32_1X);
+        structure.add("timer", VertexData.Float32_1X);
+        structure.add("newSeed", VertexData.Float32_1X);
         fillBuffers(32, size, position, structure);
         this.size = size;
         this.position = position;
@@ -82,6 +84,9 @@ class Star{
         vertexData[9] = GlobalState.starsShouldntDraw;
         vertexData[10] = GlobalState.starsResolution;
 
+        vertexData[11] = Scheduler.time();
+
+        vertexData[12] = GlobalState.seed;
 
         for (i in 0...segments) {
             var angle = i * angleStep;
@@ -89,7 +94,7 @@ class Star{
             var x = Math.cos(angle) * size + position.x;
             var y = Math.sin(angle) * size + position.y;
 
-            var index = (i + 1) * 11;
+            var index = (i + 1) * 13;
             vertexData[index] = x;
             vertexData[index + 1] = y;
             
@@ -104,6 +109,10 @@ class Star{
 
             vertexData[index + 9] = GlobalState.starsShouldntDraw;
             vertexData[index + 10] = GlobalState.starsResolution;
+
+            vertexData[index + 11] = Scheduler.time();
+
+            vertexData[index + 12] = GlobalState.seed;
 
             indexData[i * 3] = 0;
             indexData[i * 3 + 1] = i + 1;

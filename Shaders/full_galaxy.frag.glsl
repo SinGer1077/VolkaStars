@@ -6,25 +6,20 @@ in vec2 uvPosition;
 in vec4 sTypes;
 in float sDeleted;
 in float sResolution;
+in float seed;
 
 out vec4 fragColor;
 
 uniform vec2 u_resolution;
-uniform float u_time;
+in float u_time;
 
 vec2 random2( vec2 p ) {
-    return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
+    return fract(sin(vec2(dot(p,vec2(seed,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
 }
 
 float random (vec2 uv) {
     return fract(sin(dot(uv.xy,
                          vec2(12.9898,79.321)))*
-        51758.54);
-}
-
-float random1 (float uv) {
-    return fract(sin(dot(uv,
-                         12.9898))*
         51758.54);
 }
 
@@ -106,11 +101,8 @@ vec3 getColor(float star, float m_dist){
         color = vec3(0.25, 0.25, 2.0) * sTypes.z;
     if (star > 0.75 && star <= 1.0)
         color = vec3(1.0, 1.0, 1.0) * sTypes.w;   
-    return color * m_dist * (11.-uvScale);
+    return color * m_dist * (31.-uvScale);
 }
-
-
-
 
 vec3 stars(vec2 uv, float coef) {
     vec3 sky = vec3(0.);  
@@ -128,6 +120,7 @@ vec3 stars(vec2 uv, float coef) {
 
     float m_dist = 1.;
     vec2 m_point = vec2(0.);
+    vec2 m_diff = vec2(0.);
 
     for (int y= -1; y <= 1; y++) {
         for (int x= -1; x <= 1; x++) {
@@ -138,18 +131,19 @@ vec3 stars(vec2 uv, float coef) {
             vec2 diff = neighbor + point - f_st;     
             //m_point = diff;      
             float dist = 0.;
-            if (coef < 5.)
-                dist = length(diff) - bigStarFBM(diff, point) * 0.25 + 0.075;
-            else
+            //if (uvScale > 25.)
+                //dist = length(diff) - bigStarFBM(uv, point) * 0.5;
+            //else
                 dist = length(diff);
 
             if (dist < m_dist){
                 m_dist = dist;
                 m_point = point;    
+                m_diff = diff;
             }        
         }
     }
-    float fbmCoef = 0.0;    
+    float fbmCoef = 0.0;      
     m_dist = littleStar(m_dist, fbmCoef);       
     sky += m_dist; 
     sky *= getColor(m_point.x * m_point.y, m_dist);   
@@ -162,9 +156,13 @@ void main(){
     uv += uvPosition;
     vec3 col = vec3(1., 0., 0.);
     float uvScaleCoef = uvScale - 0.5;
-    vec3 galaxyTemp = galaxy(uv * 1./uvScaleCoef) * 1./((uvScale * uvScale) - 0.75); //первая половина - зум, вторая - фейд
-    vec3 starSky = stars(uv, sResolution * 0.1/(uvScale));
-   
+    vec3 galaxyTemp = galaxy(uv * 1./uvScaleCoef) * 1./((uvScale * uvScale) - 0.75);
+    vec3 starSky = vec3(0.);
+    if (uvScale < 27.)
+        starSky = stars(uv, sResolution * 0.1/(uvScale));   
+    else
+        starSky = stars(uv, 31. - uvScale);   
+
     if (uvScale > 5.)
         col = starSky;
     else

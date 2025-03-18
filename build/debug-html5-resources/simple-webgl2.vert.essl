@@ -11,6 +11,10 @@ out float sDeleted;
 layout(location = 3) in float starsDeletedCount;
 out float sResolution;
 layout(location = 4) in float starsResolution;
+out float u_time;
+layout(location = 5) in float timer;
+out float seed;
+layout(location = 6) in float newSeed;
 
 void main()
 {
@@ -21,5 +25,7 @@ void main()
     sTypes = starsTypes;
     sDeleted = starsDeletedCount;
     sResolution = starsResolution;
+    u_time = timer;
+    seed = newSeed;
 }
 

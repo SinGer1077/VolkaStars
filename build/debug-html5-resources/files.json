@@ -46,6 +46,10 @@
 			"type": "shader",
 			"inputs": [
 				{
+					"name": "seed",
+					"type": "float"
+				},
+				{
 					"name": "sTypes",
 					"type": "vec4"
 				},
@@ -68,6 +72,10 @@
 				{
 					"name": "sResolution",
 					"type": "float"
+				},
+				{
+					"name": "u_time",
+					"type": "float"
 				}
 			],
 			"outputs": [
@@ -77,10 +85,6 @@
 				}
 			],
 			"uniforms": [
-				{
-					"name": "u_time",
-					"type": "float"
-				},
 				{
 					"name": "u_resolution",
 					"type": "vec2"
@@ -559,6 +563,14 @@
 					"type": "float"
 				},
 				{
+					"name": "timer",
+					"type": "float"
+				},
+				{
+					"name": "newSeed",
+					"type": "float"
+				},
+				{
 					"name": "gl_VertexID",
 					"type": "int"
 				},
@@ -590,6 +602,14 @@
 				},
 				{
 					"name": "sResolution",
+					"type": "float"
+				},
+				{
+					"name": "u_time",
+					"type": "float"
+				},
+				{
+					"name": "seed",
 					"type": "float"
 				}
 			],
