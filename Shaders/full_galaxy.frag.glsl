@@ -4,6 +4,8 @@ in vec2 fragCoord;
 in float uvScale;
 in vec2 uvPosition;
 in vec4 sTypes;
+in float sDeleted;
+in float sResolution;
 
 out vec4 fragColor;
 
@@ -72,7 +74,7 @@ vec3 galaxy(vec2 uv) {
 	float phase = 5.*(ang-shear);	
 	
 	float spires = 1.+5.0*0.1*sin(phase);	
-	dens *= 1.7*spires;
+	dens *= 0.7*spires;
     return vec3(dens);
 }
 
@@ -116,8 +118,14 @@ vec3 stars(vec2 uv, float coef) {
     uv *= coef;
     
     vec2 i_st = floor(uv);
-    vec2 f_st = fract(uv);    
-   
+    vec2 f_st = fract(uv);  
+
+    //if ( mod(i_st.x + i_st.y, sDeleted) == 0 && sDeleted != 0)
+    //    return vec3(0.);
+    float starNoise = fract(sin(dot(i_st, vec2(12.9898, 78.233))) * 43758.5453);
+    if (starNoise < sDeleted)
+        return vec3(0.0);
+
     float m_dist = 1.;
     vec2 m_point = vec2(0.);
 
@@ -155,11 +163,11 @@ void main(){
     vec3 col = vec3(1., 0., 0.);
     float uvScaleCoef = uvScale - 0.5;
     vec3 galaxyTemp = galaxy(uv * 1./uvScaleCoef) * 1./((uvScale * uvScale) - 0.75); //первая половина - зум, вторая - фейд
-    vec3 starSky = stars(uv, 200 * 0.1/(uvScale));
+    vec3 starSky = stars(uv, sResolution * 0.1/(uvScale));
    
     if (uvScale > 5.)
         col = starSky;
     else
-        col = galaxyTemp * starSky;
+        col = galaxyTemp * starSky + galaxyTemp / 10.;
     fragColor = vec4(col,1.0);
 }

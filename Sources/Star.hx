@@ -44,6 +44,8 @@ class Star{
         structure.add("pos", VertexData.Float32_2X);    
         structure.add("uvData", VertexData.Float32_3X);   
         structure.add("starsTypes", VertexData.Float32_4X);         
+        structure.add("starsDeletedCount", VertexData.Float32_1X);
+        structure.add("starsResolution", VertexData.Float32_1X);
         fillBuffers(32, size, position, structure);
         this.size = size;
         this.position = position;
@@ -77,6 +79,8 @@ class Star{
         vertexData[7] = GlobalState.starsTypes.z;
         vertexData[8] = GlobalState.starsTypes.w;
 
+        vertexData[9] = GlobalState.starsShouldntDraw;
+        vertexData[10] = GlobalState.starsResolution;
 
 
         for (i in 0...segments) {
@@ -85,7 +89,7 @@ class Star{
             var x = Math.cos(angle) * size + position.x;
             var y = Math.sin(angle) * size + position.y;
 
-            var index = (i + 1) * 9;
+            var index = (i + 1) * 11;
             vertexData[index] = x;
             vertexData[index + 1] = y;
             
@@ -98,6 +102,8 @@ class Star{
             vertexData[index + 7] = GlobalState.starsTypes.z;
             vertexData[index + 8] = GlobalState.starsTypes.w;
 
+            vertexData[index + 9] = GlobalState.starsShouldntDraw;
+            vertexData[index + 10] = GlobalState.starsResolution;
 
             indexData[i * 3] = 0;
             indexData[i * 3 + 1] = i + 1;

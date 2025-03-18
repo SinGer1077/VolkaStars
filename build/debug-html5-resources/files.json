@@ -54,12 +54,20 @@
 					"type": "float"
 				},
 				{
+					"name": "sDeleted",
+					"type": "float"
+				},
+				{
 					"name": "fragCoord",
 					"type": "vec2"
 				},
 				{
 					"name": "uvPosition",
 					"type": "vec2"
+				},
+				{
+					"name": "sResolution",
+					"type": "float"
 				}
 			],
 			"outputs": [
@@ -543,6 +551,14 @@
 					"type": "vec4"
 				},
 				{
+					"name": "starsDeletedCount",
+					"type": "float"
+				},
+				{
+					"name": "starsResolution",
+					"type": "float"
+				},
+				{
 					"name": "gl_VertexID",
 					"type": "int"
 				},
@@ -567,6 +583,14 @@
 				{
 					"name": "sTypes",
 					"type": "vec4"
+				},
+				{
+					"name": "sDeleted",
+					"type": "float"
+				},
+				{
+					"name": "sResolution",
+					"type": "float"
 				}
 			],
 			"uniforms": [],

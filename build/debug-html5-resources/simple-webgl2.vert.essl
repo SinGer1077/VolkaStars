@@ -7,6 +7,10 @@ layout(location = 1) in vec3 uvData;
 out vec2 uvPosition;
 out vec4 sTypes;
 layout(location = 2) in vec4 starsTypes;
+out float sDeleted;
+layout(location = 3) in float starsDeletedCount;
+out float sResolution;
+layout(location = 4) in float starsResolution;
 
 void main()
 {
@@ -15,5 +19,7 @@ void main()
     uvScale = uvData.z;
     uvPosition = uvData.xy;
     sTypes = starsTypes;
+    sDeleted = starsDeletedCount;
+    sResolution = starsResolution;
 }
 

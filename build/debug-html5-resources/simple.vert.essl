@@ -7,6 +7,10 @@ attribute vec3 uvData;
 varying vec2 uvPosition;
 varying vec4 sTypes;
 attribute vec4 starsTypes;
+varying float sDeleted;
+attribute float starsDeletedCount;
+varying float sResolution;
+attribute float starsResolution;
 
 void main()
 {
@@ -15,5 +19,7 @@ void main()
     uvScale = uvData.z;
     uvPosition = uvData.xy;
     sTypes = starsTypes;
+    sDeleted = starsDeletedCount;
+    sResolution = starsResolution;
 }
 
