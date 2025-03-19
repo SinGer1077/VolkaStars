@@ -9,7 +9,7 @@ import zui.*;
 import Math;
 
 
-class FPSCounter{
+class FPSCounter implements IUiClass {
     var ui:Zui;
     var loaded:Bool;
     var deltaTime:Float = 1.0 / 60.0;

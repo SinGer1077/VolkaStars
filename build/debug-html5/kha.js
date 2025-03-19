@@ -33,12 +33,23 @@ EReg.prototype = {
 	}
 	,__class__: EReg
 };
+var IUiClass = function() { };
+$hxClasses["IUiClass"] = IUiClass;
+IUiClass.__name__ = true;
+IUiClass.__isInterface__ = true;
+IUiClass.prototype = {
+	ui: null
+	,loaded: null
+	,draw: null
+	,__class__: IUiClass
+};
 var FPSCounter = function() {
 	this.deltaTime = 0.016666666666666666;
 	kha_Assets.loadEverything($bind(this,this.loadingFinished));
 };
 $hxClasses["FPSCounter"] = FPSCounter;
 FPSCounter.__name__ = true;
+FPSCounter.__interfaces__ = [IUiClass];
 FPSCounter.prototype = {
 	ui: null
 	,loaded: null
@@ -172,6 +183,14 @@ HxOverrides.remove = function(a,obj) {
 HxOverrides.now = function() {
 	return Date.now();
 };
+var IRenderClass = function() { };
+$hxClasses["IRenderClass"] = IRenderClass;
+IRenderClass.__name__ = true;
+IRenderClass.__isInterface__ = true;
+IRenderClass.prototype = {
+	draw: null
+	,__class__: IRenderClass
+};
 var KeyboardData = function() {
 	kha_input_Keyboard.get().notify($bind(this,this.onKeyDown));
 };
@@ -210,15 +229,23 @@ Main.render = function(frames) {
 	var g4 = fb.get_g4();
 	g4.begin();
 	g4.clear(-16711936,Infinity);
-	Main.stars.draw(g4);
+	var _g = 0;
+	var _g1 = Main.renderObjects;
+	while(_g < _g1.length) {
+		var render = _g1[_g];
+		++_g;
+		render.draw(g4);
+	}
 	g4.end();
 	g2.begin(false);
 	g2.end();
-	Main.fps.draw(g2);
-	Main.starsTypes.draw(g2);
-	Main.starsCount.draw(g2);
-	Main.seedBtn.draw(g2);
-	Main.starsNames.draw(g2);
+	var _g = 0;
+	var _g1 = Main.uiObjects;
+	while(_g < _g1.length) {
+		var ui = _g1[_g];
+		++_g;
+		ui.draw(g2);
+	}
 };
 Main.main = function() {
 	kha_System.start(new kha_SystemOptions("Project",1024,768,null,null,null),function(_) {
@@ -232,12 +259,8 @@ Main.main = function() {
 			var globalState = new GlobalState(new kha_math_Vector2(1024.,768));
 			var MouseData1 = new MouseData();
 			var KeyboardData1 = new KeyboardData();
-			Main.fps = new FPSCounter();
-			Main.stars = new Stars(1.5,new kha_math_Vector2(0.,0.));
-			Main.starsTypes = new StarsTypes();
-			Main.starsCount = new StarsCountButtons();
-			Main.seedBtn = new SeedButton();
-			Main.starsNames = new StarsNames();
+			Main.renderObjects = [new Stars(1.5,new kha_math_Vector2(0.,0.))];
+			Main.uiObjects = [new SeedButton(),new StarsTypes(),new StarsCountButtons(),new StarsNames(),new FPSCounter()];
 		});
 	});
 };
@@ -306,6 +329,7 @@ var SeedButton = function() {
 };
 $hxClasses["SeedButton"] = SeedButton;
 SeedButton.__name__ = true;
+SeedButton.__interfaces__ = [IUiClass];
 SeedButton.prototype = {
 	ui: null
 	,loaded: null
@@ -346,6 +370,7 @@ var Stars = function(size,position) {
 };
 $hxClasses["Stars"] = Stars;
 Stars.__name__ = true;
+Stars.__interfaces__ = [IRenderClass];
 Stars.prototype = {
 	size: null
 	,position: null
@@ -454,6 +479,7 @@ var StarsCountButtons = function() {
 };
 $hxClasses["StarsCountButtons"] = StarsCountButtons;
 StarsCountButtons.__name__ = true;
+StarsCountButtons.__interfaces__ = [IUiClass];
 StarsCountButtons.prototype = {
 	ui: null
 	,loaded: null
@@ -494,6 +520,7 @@ var StarsNames = function() {
 };
 $hxClasses["StarsNames"] = StarsNames;
 StarsNames.__name__ = true;
+StarsNames.__interfaces__ = [IUiClass];
 StarsNames.prototype = {
 	ui: null
 	,loaded: null
@@ -546,6 +573,7 @@ var StarsTypes = function() {
 };
 $hxClasses["StarsTypes"] = StarsTypes;
 StarsTypes.__name__ = true;
+StarsTypes.__interfaces__ = [IUiClass];
 StarsTypes.prototype = {
 	ui: null
 	,loaded: null

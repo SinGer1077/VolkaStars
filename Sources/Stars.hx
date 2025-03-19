@@ -12,7 +12,7 @@ import kha.graphics4.IndexBuffer;
 import kha.graphics4.Usage;
 import Math;
 
-class Stars{
+class Stars implements IRenderClass{
 
     static var vBuffer: VertexBuffer;
     static var iBuffer: IndexBuffer;

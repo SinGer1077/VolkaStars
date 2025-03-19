@@ -7,7 +7,7 @@ import zui.*;
 
 import GlobalState;
 
-class SeedButton {
+class SeedButton implements IUiClass{
 
     var ui:Zui;
     var loaded:Bool;

@@ -9,7 +9,7 @@ import zui.*;
 
 import GlobalState;
 
-class StarsNames {
+class StarsNames implements IUiClass  {
 
     var ui:Zui;
     var loaded:Bool;

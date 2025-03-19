@@ -8,7 +8,7 @@ import zui.*;
 
 import GlobalState;
 
-class StarsCountButtons {
+class StarsCountButtons implements IUiClass{
 
     var ui:Zui;
     var loaded:Bool;

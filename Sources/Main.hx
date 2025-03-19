@@ -17,13 +17,13 @@ import StarsCountButtons;
 import SeedButton;
 import StarsNames;
 
+import IUiClass;
+import IRenderClass;
+
 class Main {
-	static var starsTypes:StarsTypes;
-	static var fps:FPSCounter;
-	static var starsCount:StarsCountButtons;
-	static var seedBtn:SeedButton;
 	static var stars:Stars;
-	static var starsNames:StarsNames;
+	static var uiObjects:Array<IUiClass>;
+	static var renderObjects:Array<IRenderClass>;
 
 	static function update(): Void {
 	}	
@@ -36,18 +36,17 @@ class Main {
 		g4.begin();
 		g4.clear(Color.Green, Math.POSITIVE_INFINITY);   
 
-		stars.draw(g4);
-
+		for (render in renderObjects){
+			render.draw(g4);
+		}	
 		g4.end();
 
 		g2.begin(false);	
 		g2.end();
 
-		fps.draw(g2);	
-		starsTypes.draw(g2);
-		starsCount.draw(g2);
-		seedBtn.draw(g2);
-		starsNames.draw(g2);
+		for (ui in uiObjects){
+			ui.draw(g2);
+		}	
 	}
 
 	public static function main() {
@@ -60,13 +59,19 @@ class Main {
 
 				var globalState = new GlobalState(new Vector2(1024., 768));
 				var MouseData = new MouseData();
-				var KeyboardData = new KeyboardData();
-				fps = new FPSCounter();
-				stars = new Stars(1.5, new Vector2(0., 0.,));
-				starsTypes = new StarsTypes();
-				starsCount = new StarsCountButtons();
-				seedBtn = new SeedButton();
-				starsNames = new StarsNames();
+				var KeyboardData = new KeyboardData();		
+				
+				renderObjects = [
+					new Stars(1.5, new Vector2(0., 0.,))
+				];
+
+				uiObjects = [
+					new SeedButton(), 
+					new StarsTypes(), 
+					new StarsCountButtons(),
+					new StarsNames(),
+					new FPSCounter()
+				];
 			});
 		});
 	}
