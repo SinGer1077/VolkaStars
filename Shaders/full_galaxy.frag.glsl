@@ -139,8 +139,9 @@ vec3 stars(vec2 uv, float coef) {
     }
     float fbmCoef = 0.0;      
     float density = 1.0;
-    if (uvScale > 25.)
-        density = clamp(sin(u_time * m_point.y) + cos(u_time) + m_point.x, 1., 2.0);
+    if (uvScale > 25.){
+        density = clamp(sin(u_time * 10. * m_point.y) + cos(u_time * 10.) + m_point.x, 1., 2.0);
+    }
     m_dist = littleStar(m_dist, fbmCoef, density);       
     sky += m_dist; 
     //sky *= getColor(m_point.x * m_point.y, m_dist);   

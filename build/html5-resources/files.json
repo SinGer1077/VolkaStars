@@ -1,6 +1,111 @@
 {
 	"files": [
 		{
+			"name": "DroidSans",
+			"files": [
+				"DroidSans.ttf"
+			],
+			"file_sizes": [
+				41028
+			],
+			"type": "font"
+		},
+		{
+			"name": "black_white_gradient",
+			"files": [
+				"black_white_gradient.png"
+			],
+			"file_sizes": [
+				7056
+			],
+			"type": "image",
+			"original_width": 360,
+			"original_height": 270
+		},
+		{
+			"name": "color_wheel",
+			"files": [
+				"color_wheel.png"
+			],
+			"file_sizes": [
+				41416
+			],
+			"type": "image",
+			"original_width": 360,
+			"original_height": 270
+		},
+		{
+			"name": "full_galaxy_frag",
+			"files": [
+				"full_galaxy.frag.essl",
+				"full_galaxy-webgl2.frag.essl",
+				"full_galaxy-relaxed.frag.essl"
+			],
+			"file_sizes": [
+				1
+			],
+			"type": "shader",
+			"inputs": [
+				{
+					"name": "seed",
+					"type": "float"
+				},
+				{
+					"name": "sTypes",
+					"type": "vec4"
+				},
+				{
+					"name": "uvScale",
+					"type": "float"
+				},
+				{
+					"name": "u_time",
+					"type": "float"
+				},
+				{
+					"name": "sDeleted",
+					"type": "float"
+				},
+				{
+					"name": "fragCoord",
+					"type": "vec2"
+				},
+				{
+					"name": "uvPosition",
+					"type": "vec2"
+				},
+				{
+					"name": "sResolution",
+					"type": "float"
+				}
+			],
+			"outputs": [
+				{
+					"name": "fragColor",
+					"type": "vec4"
+				}
+			],
+			"uniforms": [
+				{
+					"name": "u_resolution",
+					"type": "vec2"
+				}
+			],
+			"types": []
+		},
+		{
+			"name": "kode",
+			"files": [
+				"kode.png"
+			],
+			"file_sizes": [
+				7996
+			],
+			"type": "image",
+			"original_width": 280,
+			"original_height": 280
+		},
+		{
 			"name": "painter_colored_frag",
 			"files": [
 				"painter-colored.frag.essl",
@@ -391,6 +496,135 @@
 					"type": "mat4"
 				}
 			],
+			"types": [
+				{
+					"name": "gl_PerVertex",
+					"members": [
+						{
+							"type": "vec4",
+							"name": "gl_Position"
+						},
+						{
+							"type": "float",
+							"name": "gl_PointSize"
+						},
+						{
+							"type": "float[]",
+							"name": "gl_ClipDistance"
+						},
+						{
+							"type": "float[]",
+							"name": "gl_CullDistance"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "simple_frag",
+			"files": [
+				"simple.frag.essl",
+				"simple-webgl2.frag.essl",
+				"simple-relaxed.frag.essl"
+			],
+			"file_sizes": [
+				1
+			],
+			"type": "shader",
+			"inputs": [],
+			"outputs": [
+				{
+					"name": "fragColor",
+					"type": "vec4"
+				}
+			],
+			"uniforms": [],
+			"types": []
+		},
+		{
+			"name": "simple_vert",
+			"files": [
+				"simple.vert.essl",
+				"simple-webgl2.vert.essl",
+				"simple-relaxed.vert.essl"
+			],
+			"file_sizes": [
+				1
+			],
+			"type": "shader",
+			"inputs": [
+				{
+					"name": "pos",
+					"type": "vec2"
+				},
+				{
+					"name": "uvData",
+					"type": "vec3"
+				},
+				{
+					"name": "starsTypes",
+					"type": "vec4"
+				},
+				{
+					"name": "starsDeletedCount",
+					"type": "float"
+				},
+				{
+					"name": "starsResolution",
+					"type": "float"
+				},
+				{
+					"name": "timer",
+					"type": "float"
+				},
+				{
+					"name": "newSeed",
+					"type": "float"
+				},
+				{
+					"name": "gl_VertexID",
+					"type": "int"
+				},
+				{
+					"name": "gl_InstanceID",
+					"type": "int"
+				}
+			],
+			"outputs": [
+				{
+					"name": "fragCoord",
+					"type": "vec2"
+				},
+				{
+					"name": "uvScale",
+					"type": "float"
+				},
+				{
+					"name": "uvPosition",
+					"type": "vec2"
+				},
+				{
+					"name": "sTypes",
+					"type": "vec4"
+				},
+				{
+					"name": "sDeleted",
+					"type": "float"
+				},
+				{
+					"name": "sResolution",
+					"type": "float"
+				},
+				{
+					"name": "u_time",
+					"type": "float"
+				},
+				{
+					"name": "seed",
+					"type": "float"
+				}
+			],
+			"uniforms": [],
 			"types": [
 				{
 					"name": "gl_PerVertex",

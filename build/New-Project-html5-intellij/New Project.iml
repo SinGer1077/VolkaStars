@@ -18,7 +18,11 @@
       <sourceFolder url="file://c:\Users\Михаил\.vscode\extensions\kodetech.kha-25.3.1\Kha\Sources" isTestSource="false" />
       <sourceFolder url="file://c:\Users\Михаил\.vscode\extensions\kodetech.kha-25.3.1\Kha\Backends\HTML5" isTestSource="false" />
       <sourceFolder url="file://f:\Programming\Work\Volka Stars\Sources" isTestSource="false" />
+      <sourceFolder url="file://f:\Programming\Work\Volka Stars\Libraries\zui\Sources" isTestSource="false" />
 
+    </content>
+    <content url="file://f:\Programming\Work\Volka Stars\Libraries\zui">
+      <sourceFolder url="file://f:\Programming\Work\Volka Stars\Libraries\zui" isTestSource="false" />
     </content>
     
     <orderEntry type="jdk" jdkName="Haxe 3.2.0" jdkType="Haxe toolkit" />

@@ -58,7 +58,8 @@ class StarsNames {
     public function new() {
 		Assets.loadEverything(loadingFinished);
         uv = new Vector2();
-
+        uv = new Vector2(GlobalState.mousePosition.x * GlobalState.mouseWheel / 10., GlobalState.mousePosition.y * GlobalState.mouseWheel / 10.); 
+        i_st = new Vector2(Math.floor(uv.x), Math.floor(uv.y));
 	}
 
 	function loadingFinished() {        
@@ -68,13 +69,15 @@ class StarsNames {
 	}
 
     public function update() {
-        calculateStars();
+        calculateStarIndex();
     }
 
-    function calculateStars():Void {
-        uv = new Vector2(-GlobalState.mousePosition.x * GlobalState.mouseWheel * 10., GlobalState.mousePosition.y * GlobalState.mouseWheel * 10.); 
-        i_st = new Vector2(Math.floor(uv.x), Math.floor(uv.y));
-
+    function calculateStarIndex():Void {
+        uv = new Vector2(GlobalState.mousePosition.x * GlobalState.mouseWheel / 10., GlobalState.mousePosition.y * GlobalState.mouseWheel / 10.); 
+        var new_st = new Vector2(Math.floor(uv.x), Math.floor(uv.y));
+        if (new Vector2(i_st.x - new_st.x, i_st.y - new_st.y).length >= 2.0){
+            i_st = new_st;            
+        }        
     }
 
     public function draw(g: Graphics): Void{       
@@ -84,8 +87,8 @@ class StarsNames {
         if (GlobalState.mouseWheel >= 30){
 		    ui.begin(g);
             
-            if (ui.window(Id.handle(), Std.int(i_st.x), Std.int(i_st.y), 240, 600, true)) {      
-                ui.text("GLIZE"+i_st.x * i_st.y);
+            if (ui.window(Id.handle(), 300 ,10, 480, 600, true)) {      
+                ui.text("Now we are looking on: GLIZE"+i_st.x * i_st.y+" star");
             }
             ui.end();
         }        

@@ -48,7 +48,7 @@ class Main {
 		starsTypes.draw(g2);
 		starsCount.draw(g2);
 		seedBtn.draw(g2);
-		//starsNames.draw(g2);
+		starsNames.draw(g2);
 	}
 
 	public static function main() {

@@ -1,0 +1,31 @@
+#version 300 es
+
+layout(location = 0) in vec2 pos;
+out vec2 fragCoord;
+out float uvScale;
+layout(location = 1) in vec3 uvData;
+out vec2 uvPosition;
+out vec4 sTypes;
+layout(location = 2) in vec4 starsTypes;
+out float sDeleted;
+layout(location = 3) in float starsDeletedCount;
+out float sResolution;
+layout(location = 4) in float starsResolution;
+out float u_time;
+layout(location = 5) in float timer;
+out float seed;
+layout(location = 6) in float newSeed;
+
+void main()
+{
+    gl_Position = vec4(pos, 1.0, 1.0);
+    fragCoord = gl_Position.xy;
+    uvScale = uvData.z;
+    uvPosition = uvData.xy;
+    sTypes = starsTypes;
+    sDeleted = starsDeletedCount;
+    sResolution = starsResolution;
+    u_time = timer;
+    seed = newSeed;
+}
+

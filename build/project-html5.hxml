@@ -1,7 +1,10 @@
 -cp c:\Users\Михаил\.vscode\extensions\kodetech.kha-25.3.1\Kha\Sources
 -cp c:\Users\Михаил\.vscode\extensions\kodetech.kha-25.3.1\Kha\Backends\HTML5
 -cp f:\Programming\Work\Volka Stars\Sources
+-cp f:\Programming\Work\Volka Stars\Libraries\zui\Sources
+-cp f:\Programming\Work\Volka Stars\Libraries\zui
 -D hxcpp_smart_strings
+-D zui
 -D sys_g1
 -D sys_g2
 -D sys_g3

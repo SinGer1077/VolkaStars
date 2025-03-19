@@ -97,13 +97,13 @@ highp vec3 stars(inout highp vec2 uv, highp float coef)
     highp float density = 1.0;
     if (uvScale > 25.0)
     {
-        density = clamp((sin((u_time * 10.0) * m_point.y) + cos(u_time * 10.0)) + m_point.x, 1.0, 2.0);
+        density = clamp((sin(u_time * m_point.y) + cos(u_time)) + m_point.x, 1.0, 2.0);
     }
     highp float param_1 = m_dist;
     highp float param_2 = fbmCoef;
     highp float param_3 = density;
-    highp float _303 = littleStar(param_1, param_2, param_3);
-    m_dist = _303;
+    highp float _300 = littleStar(param_1, param_2, param_3);
+    m_dist = _300;
     sky += vec3(m_dist);
     highp float starNoise = fract(sin(dot(i_st, vec2(12.98980045318603515625, 78.233001708984375))) * 43758.546875);
     if (starNoise < sDeleted)
@@ -114,10 +114,10 @@ highp vec3 stars(inout highp vec2 uv, highp float coef)
     {
         highp float param_4 = m_point.x * m_point.y;
         highp float param_5 = m_dist;
-        highp vec3 _334 = sky;
-        highp vec3 _335 = _334 * getColor(param_4, param_5);
-        sky = _335;
-        return _335;
+        highp vec3 _331 = sky;
+        highp vec3 _332 = _331 * getColor(param_4, param_5);
+        sky = _332;
+        return _332;
     }
 }
 
@@ -134,15 +134,15 @@ void main()
     {
         highp vec2 param_1 = uv;
         highp float param_2 = (sResolution * 0.100000001490116119384765625) / uvScale;
-        highp vec3 _381 = stars(param_1, param_2);
-        starSky = _381;
+        highp vec3 _378 = stars(param_1, param_2);
+        starSky = _378;
     }
     else
     {
         highp vec2 param_3 = uv;
         highp float param_4 = 31.0 - uvScale;
-        highp vec3 _388 = stars(param_3, param_4);
-        starSky = _388;
+        highp vec3 _385 = stars(param_3, param_4);
+        starSky = _385;
     }
     if (uvScale > 5.0)
     {

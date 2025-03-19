@@ -1,0 +1,31 @@
+#version 100
+
+attribute vec2 pos;
+varying vec2 fragCoord;
+varying float uvScale;
+attribute vec3 uvData;
+varying vec2 uvPosition;
+varying vec4 sTypes;
+attribute vec4 starsTypes;
+varying float sDeleted;
+attribute float starsDeletedCount;
+varying float sResolution;
+attribute float starsResolution;
+varying float u_time;
+attribute float timer;
+varying float seed;
+attribute float newSeed;
+
+void main()
+{
+    gl_Position = vec4(pos, 1.0, 1.0);
+    fragCoord = gl_Position.xy;
+    uvScale = uvData.z;
+    uvPosition = uvData.xy;
+    sTypes = starsTypes;
+    sDeleted = starsDeletedCount;
+    sResolution = starsResolution;
+    u_time = timer;
+    seed = newSeed;
+}
+
