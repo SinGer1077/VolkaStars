@@ -1,10 +1,6 @@
 package;
 
-import kha.math.Vector4;
-import kha.Scheduler;
 import kha.Color;
-import kha.Font;
-import kha.Framebuffer;
 import kha.Assets;
 import kha.graphics2.Graphics;
 import zui.*;

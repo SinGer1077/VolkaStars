@@ -2,8 +2,6 @@
 precision mediump float;
 precision highp int;
 
-uniform highp vec2 u_resolution;
-
 in highp float seed;
 in highp vec4 sTypes;
 in highp float uvScale;

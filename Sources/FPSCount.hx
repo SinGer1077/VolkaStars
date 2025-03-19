@@ -2,8 +2,6 @@ package;
 
 import kha.Scheduler;
 import kha.Color;
-import kha.Font;
-import kha.Framebuffer;
 import kha.Assets;
 import kha.graphics2.Graphics;
 import zui.*;
@@ -58,8 +56,7 @@ class FPSCounter{
 	function loadingFinished() {        
 		ui = new Zui({font: Assets.fonts.DroidSans, theme: fpsTheme});
         Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
-        loaded = true;
-        //kha.System.notifyOnFrames(render);	
+        loaded = true;	
 	}
 
     public function update():Void{
@@ -69,15 +66,11 @@ class FPSCounter{
         deltaTime += (frameTime - deltaTime) * 0.1; 
     }
 
-    public function draw(g: Graphics): Void{
-        //var g = framebuffers[0].g2;
-		//g.begin();        
+    public function draw(g: Graphics): Void{       
         if (!loaded)
             return;
         
         var fps:Float = 1.0 / deltaTime;
-
-        //g.end();
         
 		ui.begin(g);
         if (ui.window(Id.handle(), 10, 10, 240, 600, true)) {        

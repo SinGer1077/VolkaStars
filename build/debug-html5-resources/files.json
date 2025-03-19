@@ -84,12 +84,7 @@
 					"type": "vec4"
 				}
 			],
-			"uniforms": [
-				{
-					"name": "u_resolution",
-					"type": "vec2"
-				}
-			],
+			"uniforms": [],
 			"types": []
 		},
 		{
@@ -510,26 +505,6 @@
 					]
 				}
 			]
-		},
-		{
-			"name": "simple_frag",
-			"files": [
-				"simple.frag.essl",
-				"simple-webgl2.frag.essl"
-			],
-			"file_sizes": [
-				1
-			],
-			"type": "shader",
-			"inputs": [],
-			"outputs": [
-				{
-					"name": "fragColor",
-					"type": "vec4"
-				}
-			],
-			"uniforms": [],
-			"types": []
 		},
 		{
 			"name": "simple_vert",

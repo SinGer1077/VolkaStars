@@ -1,4 +1,4 @@
-#version 450 core
+#version 460 core
 
 in vec2 fragCoord;
 in float uvScale;
@@ -8,50 +8,12 @@ in float sDeleted;
 in float sResolution;
 in float seed;
 
-out vec4 fragColor;
-
-uniform vec2 u_resolution;
 in float u_time;
+
+out vec4 fragColor;
 
 vec2 random2( vec2 p ) {
     return fract(sin(vec2(dot(p,vec2(seed,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
-}
-
-float random (vec2 uv) {
-    return fract(sin(dot(uv.xy,
-                         vec2(12.9898,79.321)))*
-        51758.54);
-}
-
-float noise (vec2 uv) {
-    vec2 i = floor(uv);
-    vec2 f = fract(uv);
-
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-
-    vec2 u = f * f * (3.0 - 2.0 * f);
-
-    return mix(a, b, u.x) +
-            (c - a)* u.y * (1.0 - u.x) +
-            (d - b) * u.x * u.y;
-}
-
-float fbm (vec2 uv) {
-    int octaves = 2;
-    float v = 0.0;
-    float a = 0.5;
-    vec2 shift = vec2(100.0);
-    mat2 rot = mat2(cos(0.5), sin(0.5),
-                    -sin(0.5), cos(0.5));
-    for (int i = 0; i < octaves; i++) {
-        v += a * noise(uv);
-        uv = rot * uv * 2.0 + shift;
-        a *= 0.5;
-    }
-    return v;
 }
 
 vec3 galaxy(vec2 uv) {
@@ -71,17 +33,6 @@ vec3 galaxy(vec2 uv) {
 	float spires = 1.+5.0*0.1*sin(phase);	
 	dens *= 0.7*spires;
     return vec3(dens);
-}
-
-float bigStarFBM(vec2 uv, vec2 point){
-    vec2 q = vec2(0.);
-    q.x = fbm( uv + 0.1 * u_time) + point.x;
-    q.y = fbm( uv + vec2(1.0)) + point.y;
-    vec2 r = vec2(0.);
-    r.x = fbm( uv + 1.0*q + vec2(1.7,9.2)+ 0.1 * u_time );
-    r.y = fbm( uv + 1.0*q + vec2(8.3,2.8)+ 0.126 * u_time);
-    float f = fbm(uv+r);      
-    return f;
 }
 
 float littleStar(float m_dist, float fbmCoef, float density) {
@@ -122,13 +73,9 @@ vec3 stars(vec2 uv, float coef) {
             vec2 neighbor = vec2(float(x) ,float(y));  
             
             vec2 point = random2(i_st + neighbor);         
-            vec2 diff = neighbor + point - f_st;     
-            //m_point = diff;      
+            vec2 diff = neighbor + point - f_st;          
             float dist = 0.;
-            //if (uvScale > 25.)
-                //dist = length(diff) - bigStarFBM(uv, point) * 0.5;
-            //else
-                dist = length(diff);
+            dist = length(diff);
 
             if (dist < m_dist){
                 m_dist = dist;
@@ -143,8 +90,7 @@ vec3 stars(vec2 uv, float coef) {
         density = clamp(sin(u_time * 10. * m_point.y) + cos(u_time * 10.) + m_point.x, 1., 2.0);
     }
     m_dist = littleStar(m_dist, fbmCoef, density);       
-    sky += m_dist; 
-    //sky *= getColor(m_point.x * m_point.y, m_dist);   
+    sky += m_dist;   
 
     float starNoise = fract(sin(dot(i_st, vec2(12.9898, 78.233))) * 43758.5453);
     if (starNoise < sDeleted)

@@ -1,10 +1,7 @@
 package;
 
-import haxe.ds.Vector;
-import js.lib.webassembly.Global;
 import kha.math.Vector2;
 import kha.input.Mouse;
-import kha.input.KeyCode;
 
 import GlobalState;
 
@@ -12,7 +9,7 @@ import GlobalState;
 class MouseData{
 
     public function new() {
-        kha.input.Mouse.get().notify(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
+        Mouse.get().notify(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
     }
 
     function onMouseDown(button:Int, x:Int, y:Int) {

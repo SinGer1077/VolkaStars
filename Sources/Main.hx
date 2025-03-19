@@ -1,6 +1,5 @@
 package;
 
-import kha.math.Random;
 import kha.math.Vector2;
 import kha.Assets;
 import kha.Color;
@@ -11,7 +10,7 @@ import kha.System;
 import GlobalState;
 import MouseData;
 import KeyboardData;
-import Star;
+import Stars;
 import FPSCount;
 import StarsTypes;
 import StarsCountButtons;
@@ -23,7 +22,7 @@ class Main {
 	static var fps:FPSCounter;
 	static var starsCount:StarsCountButtons;
 	static var seedBtn:SeedButton;
-	static var star:Star;
+	static var stars:Stars;
 	static var starsNames:StarsNames;
 
 	static function update(): Void {
@@ -37,7 +36,7 @@ class Main {
 		g4.begin();
 		g4.clear(Color.Green, Math.POSITIVE_INFINITY);   
 
-		star.draw(g4);
+		stars.draw(g4);
 
 		g4.end();
 
@@ -63,7 +62,7 @@ class Main {
 				var MouseData = new MouseData();
 				var KeyboardData = new KeyboardData();
 				fps = new FPSCounter();
-				star = new Star(1.5, new Vector2(0., 0.,));
+				stars = new Stars(1.5, new Vector2(0., 0.,));
 				starsTypes = new StarsTypes();
 				starsCount = new StarsCountButtons();
 				seedBtn = new SeedButton();

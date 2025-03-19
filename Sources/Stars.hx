@@ -1,30 +1,18 @@
 package;
 
 import kha.graphics4.Graphics;
-import kha.math.Vector3;
-import js.html.TimeElement;
-import haxe.Timer;
 import kha.math.Vector2;
 import kha.graphics5_.PipelineState;
-import kha.Assets;
-import kha.Color;
-import kha.Framebuffer;
 import kha.Scheduler;
-import kha.System;
-
-import kha.Color;
 import kha.Shaders;
-import kha.graphics4.Graphics2;
 import kha.graphics4.VertexBuffer;
 import kha.graphics4.VertexStructure;
 import kha.graphics4.VertexData;
 import kha.graphics4.IndexBuffer;
 import kha.graphics4.Usage;
-import kha.graphics4.VertexShader;
-import kha.graphics4.FragmentShader;
 import Math;
 
-class Star{
+class Stars{
 
     static var vBuffer: VertexBuffer;
     static var iBuffer: IndexBuffer;
@@ -135,23 +123,11 @@ class Star{
 
 
     public function draw(g4: Graphics): Void {
-		//final fb = frames[0];
-        //final g4 = fb.g4;
-
-        //g4.begin();       
-        //g4.clear(Color.Green, Math.POSITIVE_INFINITY);   
-
 		g4.setPipeline(pipeline);
 
         g4.setVertexBuffer(vBuffer);
 		g4.setIndexBuffer(iBuffer);
 
         g4.drawIndexedVertices();
-
-        //g4.end();
 	}   
-
-    private function start(): Void{
-        
-    }
 }

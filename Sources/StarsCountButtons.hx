@@ -1,10 +1,7 @@
 package;
 
-import kha.math.Vector4;
 import kha.Scheduler;
 import kha.Color;
-import kha.Font;
-import kha.Framebuffer;
 import kha.Assets;
 import kha.graphics2.Graphics;
 import zui.*;
@@ -56,13 +53,8 @@ class StarsCountButtons {
 
 	}
 
-    public function update() {
-        
-    }
-
 	function loadingFinished() {        
-		ui = new Zui({font: Assets.fonts.DroidSans, theme: typesTheme});
-        Scheduler.addTimeTask(function () { update(); }, 0, 1 / 60);
+		ui = new Zui({font: Assets.fonts.DroidSans, theme: typesTheme});        
         loaded = true;	
 	}
 
